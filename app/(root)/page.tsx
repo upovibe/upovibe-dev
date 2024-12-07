@@ -21,7 +21,7 @@ const Page = () => {
   }, []);
 
   return (
-    <main className="flex flex-col items-center justify-center bg-green-600">
+    <main className="flex flex-col items-center justify-center">
       <Hero />
       <About />
       <SignIn isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
