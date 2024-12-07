@@ -5,7 +5,7 @@ const Navbar = () => {
   const navItems = ["About", "Skills", "Projects", "Blog", "Contact"];
 
   return (
-    <nav className="flex items-center justify-between w-full container">
+    <nav className="flex items-center justify-between w-full container px-6">
       <Link href="/">
         <h1 className="text-3xl font-extrabold tracking-tight text-gray-800 dark:text-gray-200">
           Promise Uzor

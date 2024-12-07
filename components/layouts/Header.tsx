@@ -3,7 +3,7 @@ import Navbar from './Navbar'
 
 const Header = () => {
   return (
-    <header className='py-6 flex items-center justify-center px-2'>
+    <header className='py-6 flex items-center justify-center'>
         <Navbar/>
     </header>
   )
