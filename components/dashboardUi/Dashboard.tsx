@@ -21,7 +21,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user }) => {
   };
 
   return (
-    <div className="bg-black/30 border-b w-full container flex flex-col lg:flex-row items-center justify-between py-8 px-6">
+    <div className="bg-black/30 w-full container flex items-center justify-between py-8 px-6">
       <div className="flex flex-col md:flex-row space-x-6">
         {/* Aside component (sidebar) */}
         <aside className="flex-none w-full md:w-1/4 p-6 bg-gray-800 text-white">
