@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Hero from "@/components/sections/Hero";
-import About from "@/components/sections/About";
+import Hero from "@/components/pageUi/Hero";
+import About from "@/components/pageUi/About";
 import SignIn from "@/components/layouts/SignIn";
 
 const Page = () => {
@@ -21,7 +21,7 @@ const Page = () => {
   }, []);
 
   return (
-    <main className="w-full flex flex-col items-center justify-center">
+    <main className="flex flex-col items-center justify-center bg-green-600">
       <Hero />
       <About />
       <SignIn isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
