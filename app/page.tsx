@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
-import SignIn from "@/components/sections/SignIn";
+import SignIn from "@/components/layouts/SignIn";
 
 const Page = () => {
   const [isModalOpen, setModalOpen] = useState(false);
