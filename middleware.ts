@@ -1,1 +1,6 @@
-export { auth as middleware } from "@/auth"; // Import auth from the auth.ts file to handle sessions
+import { auth } from "@/auth";
+
+export { auth as middleware };
+export const config = {
+  matcher: ["/dashboard"], // Add routes to protect
+};

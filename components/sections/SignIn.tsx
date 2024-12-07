@@ -11,7 +11,7 @@ export default function SignIn({ isOpen, onClose }: { isOpen: boolean; onClose: 
         <form
           onSubmit={async (e) => {
             e.preventDefault();
-            await signIn("github"); // Trigger GitHub sign-in
+            await signIn("github", { callbackUrl: "/dashboard" }); // Redirect to dashboard after sign-in
           }}
         >
           <button
