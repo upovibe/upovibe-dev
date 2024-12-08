@@ -2,14 +2,14 @@
 
 import React from "react";
 import { useSession } from "next-auth/react";
-import Loading from "@/components/ui/Loading";
 import Unauthorized from "@/components/dashboardUi/Unauthorized";
+import LoaderCircle from "@/components/ui/LoaderCircle";
 
 const DashboardPage = () => {
   const { data: session, status } = useSession();
 
   if (status === "loading") {
-    return <Loading />;
+    return <LoaderCircle/>;
   }
 
   if (!session) {

@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import Lottie from "lottie-react";
-import heroAnimation from "@/public/animations/Hero-Animation.json";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 function Hero() {
   return (
@@ -16,16 +15,17 @@ function Hero() {
           Promise Uzor Okwudiri
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-400">
-          Crafting impactful web solutions with modern technologies. Ready to collaborate, innovate, and grow with forward-thinking teams.
+          Crafting impactful web solutions with modern technologies. Ready to
+          collaborate, innovate, and grow with forward-thinking teams.
         </p>
       </div>
 
       {/* Right Side (Lottie Animation) */}
       <div className="w-full lg:w-1/2 flex justify-center items-center">
-        <Lottie 
-          animationData={heroAnimation} 
-          loop 
-          className="w-64 h-64 lg:w-80 lg:h-80"
+        <DotLottieReact
+          src="https://lottie.host/056d4b53-2195-4a1e-b4b1-9269f09b6506/NGOOsDFLR9.json"
+          loop
+          autoplay
         />
       </div>
     </div>

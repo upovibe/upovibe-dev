@@ -4,8 +4,8 @@ import React from "react";
 import { useSession } from "next-auth/react";
 import Sidebar from "@/components/dashboardUi/Sidbar";
 import Header from "@/components/layouts/Header";
-import Loading from "@/components/ui/Loading";
 import Unauthorized from "@/components/dashboardUi/Unauthorized";
+import LoaderCircle from "@/components/ui/LoaderCircle";
 
 export default function Layout({
   children,
@@ -13,7 +13,7 @@ export default function Layout({
   const { data: session, status } = useSession();
 
   if (status === "loading") {
-    return <Loading />;
+    return <LoaderCircle/>;
   }
 
   if (!session || !session.user) {
