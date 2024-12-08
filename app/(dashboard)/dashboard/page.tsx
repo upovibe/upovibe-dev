@@ -4,7 +4,6 @@ import React from "react";
 import { useSession } from "next-auth/react";
 import Loading from "@/components/ui/Loading";
 import Unauthorized from "@/components/dashboardUi/Unauthorized";
-import Dashboard from "@/components/dashboardUi/Dashboard";
 
 const DashboardPage = () => {
   const { data: session, status } = useSession();
@@ -20,11 +19,11 @@ const DashboardPage = () => {
   const { user } = session;
 
   return (
-    <main className="flex flex-col items-center justify-center">
-      <Dashboard user={user} />
-    </main>
+      <div className="">
+        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <p>Welcome, {user?.name}!</p>
+      </div>
   );
 };
 
 export default DashboardPage;
-
