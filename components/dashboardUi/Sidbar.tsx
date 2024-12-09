@@ -67,7 +67,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:block ${
           collapsed ? "w-14" : "w-64"
-        } flex flex-col justify-between p-2 border rounded-lg gap-10`}
+        } flex flex-col justify-between p-2 border rounded-lg`}
       >
         <ul className="flex flex-col gap-2">
           {menuItems.map((item, index) => (
@@ -87,7 +87,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
             </Link>
           ))}
         </ul>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 mt-10">
           <Link
             href="/profile"
             className="flex items-center gap-2 p-2 hover:bg-gray-200 transition-all duration-200 ease-linear rounded-lg"

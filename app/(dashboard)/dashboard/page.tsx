@@ -9,7 +9,7 @@ const DashboardPage = () => {
   const { data: session, status } = useSession();
 
   if (status === "loading") {
-    return <LoaderCircle/>;
+    return <LoaderCircle />;
   }
 
   if (!session) {
@@ -19,10 +19,10 @@ const DashboardPage = () => {
   const { user } = session;
 
   return (
-      <div className="">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p>Welcome, {user?.name}!</p>
-      </div>
+    <div className="">
+      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <p>Welcome, {user?.name}!</p>
+    </div>
   );
 };
 
