@@ -1,32 +1,25 @@
-import React from 'react'
-import Link from "next/link";
+import React from "react";
+import { prisma } from "@/prisma";
+import TableLayout from "@/components/dashboardUi/TableLayout"; // Client Component
 
-const categorys = [
-    { id: 1, name: "category 1" },
-    { id: 2, name: "category 2" },
-  ];
+const CategoryPage = async () => {
+  const category = await prisma.category.findMany();
 
-const page = () => {
-    return (
-      <div className="">
-          <h1 className="text-2xl font-bold">categorys</h1>
-          <Link href="/dashboard/category/new" className="text-blue-600 hover:underline">
-            + New category
-          </Link>
-          <ul className="mt-4">
-            {categorys.map((category) => (
-              <li key={category.id}>
-                <Link
-                  href={`/dashboard/category/${category.id}`}
-                  className="text-blue-600 hover:underline"
-                >
-                  {category.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      );
-}
+  const deleteRow = async (id: number) => {
+    "use server";
+    await prisma.category.delete({ where: { id } });
+  };  
+  
+  return (
+    <div>
+      <h1 className="text-2xl font-bold">Category</h1>
+      <TableLayout
+        data={category}
+        title="Category"
+        deleteRow={deleteRow}
+      />
+    </div>
+  );
+};
 
-export default page
+export default CategoryPage;

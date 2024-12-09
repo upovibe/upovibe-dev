@@ -24,7 +24,7 @@ export default function Layout({
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <main className="w-full container flex mx-auto">
         <Sidebar user={user} />
         <div className="flex-1 ml-5 border rounded-lg p-2">
