@@ -1,5 +1,6 @@
 "use server";
-
+import fs from 'fs';
+import path from 'path';
 import { prisma } from "@/prisma";
 import { revalidatePath } from "next/cache";
 
@@ -100,15 +101,39 @@ export const deleteCategory = async (id: string) => {
 // ---------------- Project ----------------
 
 // Create a new project
-
 export const createProject = async (formData: FormData) => {
-  const title = formData.get("title") as string;
-  const description = formData.get("description") as string || "Default description";
-  const image = formData.get("image") as string | null;
+  const title = formData.get("title") as string | null;
+  const description = formData.get("description") as string | null;
+  const imageFile = formData.get("image") as File | null; // This is now a File object
   const categories = formData.getAll("categories") as string[];
 
   if (!title || !description) {
-    throw new Error("Title and description are required");
+    console.error("Missing required fields: title or description");
+    return { success: false, error: "Title and description are required" };
+  }
+
+  let imagePath: string | null = null;
+
+  if (imageFile) {
+    try {
+      const uploadsDir = path.resolve("./uploads");
+      if (!fs.existsSync(uploadsDir)) {
+        fs.mkdirSync(uploadsDir);
+      }
+      
+      // Generate a unique name for the file
+      const fileName = `${Date.now()}_${imageFile.name}`;
+      const filePath = path.join(uploadsDir, fileName);
+
+      // Write the file to the uploads directory
+      const buffer = Buffer.from(await imageFile.arrayBuffer());
+      fs.writeFileSync(filePath, buffer);
+
+      imagePath = `/uploads/${fileName}`; // Relative path to the uploaded file
+    } catch (err) {
+      console.error("Error saving the image file:", err);
+      return { success: false, error: "Failed to save image file" };
+    }
   }
 
   try {
@@ -117,7 +142,7 @@ export const createProject = async (formData: FormData) => {
         title,
         description,
         slug: title.replace(/\s+/g, "_").toLowerCase(),
-        image,
+        image: imagePath,
         categories: {
           connect: categories.map((id) => ({ id: parseInt(id) })),
         },
@@ -133,17 +158,73 @@ export const createProject = async (formData: FormData) => {
   }
 };
 
-
 // Edit an existing project
+// export const editProject = async (formData: FormData, id: string) => {
+//   const title = formData.get("title") as string;
+//   const description = formData.get("description") as string;
+//   const image = formData.get("image") as string | null;
+//   const categories = formData.getAll("categories") as string[];
+
+//   if (!title || !description) {
+//     throw new Error("Title and description are required");
+//   }
+
+//   try {
+//     const parsedId = parseInt(id);
+//     if (isNaN(parsedId)) throw new Error("Invalid project ID");
+
+//     const updatedProject = await prisma.project.update({
+//       where: { id: parsedId },
+//       data: {
+//         title,
+//         description,
+//         slug: title.replace(/\s+/g, "_").toLowerCase(),
+//         image,
+//         categories: {
+//           set: categories.map((id) => ({ id: parseInt(id) })), // Replace existing associations
+//         },
+//       },
+//     });
+
+//     return { success: true, project: updatedProject };
+//   } catch (error) {
+//     console.error("Error editing project:", error);
+//     return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
+//   }
+// };
 
 export const editProject = async (formData: FormData, id: string) => {
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
-  const image = formData.get("image") as string | null;
+  const imageFile = formData.get("image") as File | null;
   const categories = formData.getAll("categories") as string[];
 
   if (!title || !description) {
     throw new Error("Title and description are required");
+  }
+
+  let imagePath: string | null = null;
+
+  if (imageFile) {
+    try {
+      const uploadsDir = path.resolve("./uploads");
+      if (!fs.existsSync(uploadsDir)) {
+        fs.mkdirSync(uploadsDir);
+      }
+
+      // Generate a unique name for the new file
+      const fileName = `${Date.now()}_${imageFile.name}`;
+      const filePath = path.join(uploadsDir, fileName);
+
+      // Write the new file to the uploads directory
+      const buffer = Buffer.from(await imageFile.arrayBuffer());
+      fs.writeFileSync(filePath, buffer);
+
+      imagePath = `/uploads/${fileName}`;
+    } catch (err) {
+      console.error("Error saving the new image file:", err);
+      return { success: false, error: "Failed to save new image file" };
+    }
   }
 
   try {
@@ -156,12 +237,15 @@ export const editProject = async (formData: FormData, id: string) => {
         title,
         description,
         slug: title.replace(/\s+/g, "_").toLowerCase(),
-        image,
+        image: imagePath || undefined,
         categories: {
-          set: categories.map((id) => ({ id: parseInt(id) })), // Replace existing associations
+          set: categories.map((id) => ({ id: parseInt(id) })),
         },
       },
     });
+
+    // Optional: Revalidate paths if needed
+    // revalidatePath(`/dashboard/project/${id}`);
 
     return { success: true, project: updatedProject };
   } catch (error) {
@@ -170,8 +254,8 @@ export const editProject = async (formData: FormData, id: string) => {
   }
 };
 
-// Delete a project
 
+// Delete a project
 export const deleteProject = async (id: string) => {
   try {
     const parsedId = parseInt(id);
@@ -192,7 +276,6 @@ export const deleteProject = async (id: string) => {
 // ----------------Blog---------------------------
 
 // Create a blog 
-
 export const createBlog = async (formData: FormData) => {
   const title = formData.get("title") as string;
   const description = formData.get("description") as string || "Default description";
@@ -225,9 +308,7 @@ export const createBlog = async (formData: FormData) => {
   }
 };
 
-
 // Edit a blog
-
 export const editBlog = async (formData: FormData, id: string) => {
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
@@ -263,7 +344,6 @@ export const editBlog = async (formData: FormData, id: string) => {
 };
 
 // Delete a blog
-
 export const deleteBlog = async (id: string) => {
   try {
     const parsedId = parseInt(id);

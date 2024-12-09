@@ -4,7 +4,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage, BreadcrumbS
 import Link from "next/link";
 import { Tag } from "lucide-react";
 import DeleteButton from "@/components/dashboardUi/DeleteButton";
-import { deleteCategory } from "@/app/actions/formActions";
+import { deleteCategory } from "@/app/api/crude/formActions";
 
 interface PageProps {
   params: {

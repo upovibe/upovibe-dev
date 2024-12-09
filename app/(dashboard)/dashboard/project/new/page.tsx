@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
 import { Tag } from "lucide-react";
-import { createProject } from "@/app/actions/formActions";
+import { createProject } from "@/app/api/crude/formActions";
 import FormLayout from "@/components/dashboardUi/FormLayout";
 
 const page = () => {
@@ -38,11 +38,11 @@ const page = () => {
           Add new project
         </h1>
         <FormLayout
-          fields={["title", "description", "category"]}
+          fields={["title", "description", "image"]}
           labels={{
             title: "Project Name",
             description: "Project Description",
-            category: "Parent Category",
+            image: "images/project",
           }}
           onSubmit={createProject}
           initialData={{}}

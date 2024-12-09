@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import { Tag } from "lucide-react";
 import FormLayout from "@/components/dashboardUi/FormLayout";
-import { editCategory } from "@/app/actions/formActions";
+import { editCategory } from "@/app/api/crude/formActions";
 
 interface PageProps {
   params: {
