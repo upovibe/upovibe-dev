@@ -27,7 +27,7 @@ export default function Layout({
       <Header />
       <main className="w-full container flex mx-auto px-4 py-8">
         <Sidebar user={user} />
-        <div className="flex-1 rounded-lg px-4">
+        <div className="flex-1 rounded-lg m-0 md:ml-5 px-4 border">
         {children}
         </div>
       </main>
