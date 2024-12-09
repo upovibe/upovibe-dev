@@ -24,10 +24,10 @@ export default function Layout({
 
   return (
     <>
-      {/* <Header /> */}
-      <main className="w-full container flex mx-auto">
+      <Header />
+      <main className="w-full container flex mx-auto px-4 py-8">
         <Sidebar user={user} />
-        <div className="flex-1 ml-5 border rounded-lg p-2">
+        <div className="flex-1 rounded-lg px-4">
         {children}
         </div>
       </main>

@@ -5,7 +5,7 @@ import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 function Hero() {
   return (
-    <div className="bg-black/30 border-b w-full container flex flex-col lg:flex-row items-center justify-between py-8 px-6">
+    <div className="h-[40vh] border-b w-full container flex flex-col lg:flex-row items-center justify-between py-8 px-6">
       {/* Left Side (Text Content) */}
       <div className="w-full lg:w-1/2 text-center lg:text-left">
         <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-300 uppercase mb-2">
