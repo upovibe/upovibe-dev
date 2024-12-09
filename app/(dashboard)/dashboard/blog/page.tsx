@@ -1,41 +1,35 @@
-"use Client";
-
 import React from "react";
 import Link from "next/link";
 import { prisma } from "@/prisma";
+import TableLayout from "@/components/dashboardUi/TableLayout";
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
+  // BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { FilePenLine } from "lucide-react";
 
 const page = async () => {
-  const blog = await prisma.blog.findMany({
-    where: {
-      title: {},
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  const blog = await prisma.blog.findMany();
+
+  const deleteRow = async (id: number) => {
+    "use server";
+    await prisma.blog.delete({ where: { id } });
+  };
 
   return (
     <div>
-      <Breadcrumb>
+      <Breadcrumb className="border px-1 rounded-md mb-5">
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink>
-              <Link href="/">Home</Link>
-            </BreadcrumbLink>
+            <Link href="/">Home</Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink>
-              <Link href="/dashboard">Dashboard</Link>
-            </BreadcrumbLink>
+            <Link href="/dashboard">Dashboard</Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
@@ -43,26 +37,11 @@ const page = async () => {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-
-      <h1 className="text-2xl font-bold">blog</h1>
-      <Link
-        href="/dashboard/blog/new"
-        className="text-blue-600 hover:underline"
-      >
-        + New Blog
-      </Link>
-      <ul className="mt-4">
-        {blog.map((blog) => (
-          <li key={blog.id}>
-            <Link
-              href={`/dashboard/blog/${blog.id}`}
-              className="text-blue-600 hover:underline"
-            >
-              {blog.title}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <h1 className="text-2xl font-bold flex items-center gap-2">
+        <FilePenLine className="size-5" />
+        Blogs
+      </h1>
+      <TableLayout data={blog} title="blog" deleteRow={deleteRow} />
     </div>
   );
 };

@@ -1,10 +1,17 @@
 import React from "react";
 import { prisma } from "@/prisma";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import Link from "next/link";
 import { Tag } from "lucide-react";
 import DeleteButton from "@/components/dashboardUi/DeleteButton";
 import { deleteCategory } from "@/app/api/crude/formActions";
+import { Button } from "@/components/ui/button";
 
 interface PageProps {
   params: {
@@ -51,19 +58,24 @@ const page = async ({ params }: PageProps) => {
       <div className="flex flex-col gap-2">
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <Tag className="size-5" />
-          Category
+          {category.title}
         </h1>
-        <div className="flex items-center justify-between gap-5">
-          <ul>
-            <li className="border px-2 rounded-lg w-fit">{category.title}</li>
-          </ul>
-          <DeleteButton
-            action={deleteCategory}
-            args={[category.id]}
-            buttonText="Delete"
-            successRedirect="/dashboard/category"
-            errorMessage="Error deleting category"
-          />
+        <div className="flex flex-col w-full gap-5">
+          <p className="border px-2 rounded-md">{category.description}</p>
+          <div className="flex items-center justify-end gap-2 w-full">
+            <Button className="bg-slate-400 px-2 py-1 rounded-md hover:bg-slate-700 hover:text-white duration-200 ease-linear ">
+              <Link href={`/dashboard/category/${category.slug}/edit`}>
+                Edit
+              </Link>
+            </Button>
+            <DeleteButton
+              action={deleteCategory}
+              args={[category.id]}
+              buttonText="Delete"
+              successRedirect="/dashboard/category"
+              errorMessage="Error deleting category"
+            />
+          </div>
         </div>
       </div>
     </div>
