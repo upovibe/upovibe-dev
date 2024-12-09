@@ -9,7 +9,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
+  // DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -35,7 +35,17 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
 } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal, ChevronDown, PlusSquare, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ArrowUpDown,
+  MoreHorizontal,
+  ChevronDown,
+  PlusSquare,
+  ChevronLeft,
+  ChevronRight,
+  Eye,
+  SquarePen,
+  Trash2,
+} from "lucide-react";
 import toast from "react-hot-toast";
 
 // Define generic types for TableLayout
@@ -135,7 +145,7 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
       cell: ({ row }) => (
         <Link
           href={`/dashboard/${title.toLowerCase()}/${row.original.slug}`}
-          className="text-blue-600 hover:underline"
+          className="text-blue-600 hover:underline capitalize"
         >
           {row.getValue("name")}
         </Link>
@@ -161,27 +171,31 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
             <DropdownMenuItem>
               <Link
                 href={`/dashboard/${title.toLowerCase()}/${row.original.slug}`}
-                className="w-full"
+                className="w-full flex items-center gap-2 hover:text-green-500 transition-all duration-100 ease-linear"
               >
+                <Eye className="size-4" />
                 View
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Link
                 href={`/dashboard/${title.toLowerCase()}/${
                   row.original.slug
                 }/edit`}
-                className="w-full"
+                className="w-full flex items-center gap-2 hover:text-blue-500 transition-all duration-100 ease-linear"
               >
+                <SquarePen className="size-4" />
                 Edit
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => handleDelete(row.original.id)}
-              className="text-red-600 w-full cursor-pointer"
-            >
-              Delete
+            <DropdownMenuItem>
+              <div
+                onClick={() => handleDelete(row.original.id)}
+                className="text-red-600 w-full cursor-pointer flex items-center gap-2 hover:text-red-600 transition-all duration-200 ease-linear"
+              >
+                <Trash2 className="size-4" />
+                Delete
+              </div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -215,9 +229,12 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
           }
           className="max-w-sm"
         />
-        <div className="flex items-center gap-2">
-          <Button onClick={() => router.push(addRowUrl)} className="flex items-center gap-1">
-            <PlusSquare className=""/>
+        <div className="flex items-center gap-2 hover:text-green-500 transition-all duration-200 ease-linear">
+          <Button
+            onClick={() => router.push(addRowUrl)}
+            className="flex items-center gap-1"
+          >
+            <PlusSquare className="" />
             <span className="hidden md:inline-block">Add {title}</span>
           </Button>
           <DropdownMenu>
@@ -310,7 +327,7 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            <ChevronLeft/>
+            <ChevronLeft />
             <span className="hidden md:inline-block">Previous</span>
           </Button>
           <Button
@@ -320,7 +337,7 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
             disabled={!table.getCanNextPage()}
           >
             <span className="hidden md:inline-block">Next</span>
-            <ChevronRight/>
+            <ChevronRight />
           </Button>
         </div>
       </div>

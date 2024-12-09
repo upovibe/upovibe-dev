@@ -1,9 +1,9 @@
-import React from "react";
-import { prisma } from "@/prisma";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
-  // BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
@@ -13,26 +13,30 @@ import { Tag } from "lucide-react";
 import FormLayout from "@/components/dashboardUi/FormLayout";
 import { editCategory } from "@/app/actions/formActions";
 
-interface PageProps {
-  params: {
+interface EditCategoryPageProps {
+  category: {
+    id: number;
+    name: string;
+    description: string;
     slug: string;
+    image?: string;
   };
 }
 
-const page = async ({ params }: PageProps) => {
-  const category = await prisma.category.findUnique({
-    where: {
-      slug: params.slug,
-    },
-  });
+const EditCategoryPage: React.FC<EditCategoryPageProps> = ({ category }) => {
+  const handleEditCategory = async (formData: FormData) => {
+    try {
+      const result = await editCategory(formData, category.id.toString());
+      if (result.success) {
+        alert("Category edited successfully");
+      } else {
+        alert(`Error: ${result.error}`);
+      }
+    } catch (error) {
+      console.error("Error editing category:", error);
+    }
+  };
 
-  if (!category || !category.id) {
-    return (
-      <div>
-        <h1 className="text-2xl font-bold">Category Not Found</h1>
-      </div>
-    );
-  }
   return (
     <div>
       <Breadcrumb className="border px-1 rounded-md mb-5">
@@ -66,16 +70,20 @@ const page = async ({ params }: PageProps) => {
           Edit {category.slug}
         </h1>
         <FormLayout
-          fields={["name"]}
-          labels={{ name: "Category Name" }}
-          onSubmit={editCategory}
-          additionalSubmitArgs={[category.id]}
-          initialData={{ name: category.name }}
-          successRedirect={"/dashboard/category"} 
+          titleLabel="Category Name"
+          descriptionLabel="Category Description"
+          imageLabel="Category Image"
+          categoryLabel="Parent Category"
+          onSubmit={handleEditCategory}
+          initialData={{
+            name: category.name,
+            description: category.description,
+            image: category.image,
+          }}
         />
       </div>
     </div>
   );
 };
 
-export default page;
+export default EditCategoryPage;
