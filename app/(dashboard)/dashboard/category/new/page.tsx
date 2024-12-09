@@ -38,8 +38,11 @@ const page = () => {
           Add new category
         </h1>
         <FormLayout
-          fields={["name"]}
-          labels={{ name: "Category Name" }}
+          fields={["title", "description"]}
+          labels={{ 
+            title: "Category Name",
+            description: "Category Description",
+          }}
           onSubmit={createCategory}
           initialData={{}}
           successRedirect={"/dashboard/category"} 

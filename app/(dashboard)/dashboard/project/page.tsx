@@ -1,32 +1,49 @@
-import React from 'react'
+import React from "react";
 import Link from "next/link";
+import { prisma } from "@/prisma";
+import TableLayout from "@/components/dashboardUi/TableLayout";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  // BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { FolderGit2 } from "lucide-react";
 
-const projects = [
-    { id: 1, name: "Project 1" },
-    { id: 2, name: "Project 2" },
-  ];
+const page = async () => {
+  const project = await prisma.project.findMany();
 
-const page = () => {
-    return (
-        <div>
-          <h1 className="text-2xl font-bold">Projects</h1>
-          <Link href="/dashboard/project/new" className="text-blue-600 hover:underline">
-            + New Project
-          </Link>
-          <ul className="mt-4">
-            {projects.map((project) => (
-              <li key={project.id}>
-                <Link
-                  href={`/dashboard/projects/${project.id}`}
-                  className="text-blue-600 hover:underline"
-                >
-                  {project.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      );
-}
+  const deleteRow = async (id: number) => {
+    "use server";
+    await prisma.project.delete({ where: { id } });
+  };
 
-export default page
+  return (
+    <div>
+      <Breadcrumb className="border px-1 rounded-md mb-5">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <Link href="/">Home</Link>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <Link href="/dashboard">Dashboard</Link>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Project</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <h1 className="text-2xl font-bold flex items-center gap-2">
+        <FolderGit2 className="size-5" />
+        Projects
+      </h1>
+      <TableLayout data={project} title="Project" deleteRow={deleteRow} />
+    </div>
+  );
+};
+
+export default page;

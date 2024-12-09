@@ -26,28 +26,31 @@ import { prisma } from "@/prisma";
 import { Category } from "@prisma/client";
 
 interface FormLayoutProps {
-  fields: Array<"name" | "description" | "image" | "category">;
+  fields: Array<"title" | "description" | "image" | "category">;
   labels?: {
-    name?: string;
+    title?: string;
     description?: string;
     image?: string;
     category?: string;
   };
-  onSubmit: (formData: FormData, ...args: any[]) => Promise<{ success: boolean; error?: string }>;
+  onSubmit: (
+    formData: FormData,
+    ...args: unknown[]
+  ) => Promise<{ success: boolean; error?: string }>;
   additionalSubmitArgs?: unknown[];
   initialData?: {
-    name?: string;
+    title?: string;
     description?: string;
     image?: string;
     categoryId?: string;
   };
-  successRedirect?: string; 
+  successRedirect?: string;
 }
 
 const FormLayout: React.FC<FormLayoutProps> = ({
   fields,
   labels = {
-    name: "Name",
+    title: "Name /Title",
     description: "Description",
     image: "Image",
     category: "Category",
@@ -73,8 +76,8 @@ const FormLayout: React.FC<FormLayoutProps> = ({
 
   const validateForm = (formData: FormData) => {
     const newErrors: Record<string, string> = {};
-    if (fields.includes("name") && !formData.get("name")) {
-      newErrors.name = "Name is required.";
+    if (fields.includes("title") && !formData.get("title")) {
+      newErrors.title = "Title/Name is required.";
     }
     if (fields.includes("description") && !formData.get("description")) {
       newErrors.description = "Description is required.";
@@ -89,6 +92,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
+    formData.set("categoryId", value);
   
     if (!validateForm(formData)) {
       toast.error("All fields are required.");
@@ -98,30 +102,31 @@ const FormLayout: React.FC<FormLayoutProps> = ({
     const result = await onSubmit(formData, ...additionalSubmitArgs);
   
     if (result.success) {
-        toast.success("Successful.");
-        if (successRedirect) {
-          router.push(successRedirect); // Redirect after success
-        }
+      toast.success("Successful.");
+      if (successRedirect) {
+        router.push(successRedirect);
+      }
     } else {
       toast.error(`Error: ${result.error}`);
-    } 
-  };
-  
+    }
+  };  
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="grid w-full items-center gap-5 border p-4 rounded-lg">
-        {fields.includes("name") && (
+        {fields.includes("title") && (
           <div className="grid w-full gap-1.5">
-            <Label htmlFor="name">{labels.name}</Label>
+            <Label htmlFor="title">{labels.title}</Label>
             <Input
               type="text"
-              id="name"
-              name="name"
-              placeholder={`Enter ${labels.name?.toLowerCase()}`}
-              defaultValue={initialData?.name}
+              id="title"
+              name="title"
+              placeholder={`Enter ${labels.title?.toLowerCase()}`}
+              defaultValue={initialData?.title}
             />
-            {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+            {errors.title && (
+              <p className="text-red-500 text-sm">{errors.title}</p>
+            )}
           </div>
         )}
         {fields.includes("description") && (
@@ -156,8 +161,9 @@ const FormLayout: React.FC<FormLayoutProps> = ({
                   className="justify-between"
                 >
                   {value
-                    ? categories.find((category) => category.id === parseInt(value))
-                        ?.name
+                    ? categories.find(
+                        (category) => category.id === parseInt(value)
+                      )?.title
                     : "Select category..."}
                   <ChevronsUpDown className="opacity-50" />
                 </Button>
@@ -173,12 +179,14 @@ const FormLayout: React.FC<FormLayoutProps> = ({
                           key={category.id}
                           value={category.id.toString()}
                           onSelect={(currentValue) => {
-                            setValue(currentValue === value ? "" : currentValue);
+                            setValue(
+                              currentValue === value ? "" : currentValue
+                            );
                             setOpen(false);
                           }}
                           className="cursor-pointer"
                         >
-                          {category.name}
+                          {category.title}
                           <Check
                             className={cn(
                               "ml-auto",

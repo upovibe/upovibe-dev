@@ -66,12 +66,18 @@ const page = async ({ params }: PageProps) => {
           Edit {category.slug}
         </h1>
         <FormLayout
-          fields={["name"]}
-          labels={{ name: "Category Name" }}
+          fields={["title", "description"]}
+          labels={{
+            title: "Category Name",
+            description: "Category Description",
+          }}
           onSubmit={editCategory}
           additionalSubmitArgs={[category.id]}
-          initialData={{ name: category.name }}
-          successRedirect={"/dashboard/category"} 
+          initialData={{
+            title: category.title,
+            description: category.description,
+          }}
+          successRedirect={"/dashboard/category"}
         />
       </div>
     </div>

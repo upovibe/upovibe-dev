@@ -55,7 +55,7 @@ const page = async ({ params }: PageProps) => {
         </h1>
         <div className="flex items-center justify-between gap-5">
           <ul>
-            <li className="border px-2 rounded-lg w-fit">{category.name}</li>
+            <li className="border px-2 rounded-lg w-fit">{category.title}</li>
           </ul>
           <DeleteButton
             action={deleteCategory}

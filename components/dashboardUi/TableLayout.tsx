@@ -104,6 +104,200 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
   //     }
   //   };
 
+  // const columns: ColumnDef<T>[] = [
+  //   {
+  //     id: "select",
+  //     header: ({ table }) => (
+  //       <Checkbox
+  //         checked={
+  //           table.getIsAllPageRowsSelected() ||
+  //           (table.getIsSomePageRowsSelected() && "indeterminate")
+  //         }
+  //         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //         aria-label="Select all"
+  //       />
+  //     ),
+  //     cell: ({ row }) => (
+  //       <Checkbox
+  //         checked={row.getIsSelected()}
+  //         onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //         aria-label="Select row"
+  //       />
+  //     ),
+  //     enableSorting: false,
+  //     enableHiding: false,
+  //   },
+  //   {
+  //     accessorKey: "id",
+  //     header: "ID",
+  //     cell: ({ row }) => row.getValue("id"),
+  //   },
+  //   {
+  //     accessorKey: "name",
+  //     header: ({ column }) => (
+  //       <Button
+  //         variant="ghost"
+  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+  //       >
+  //         Name <ArrowUpDown />
+  //       </Button>
+  //     ),
+  //     cell: ({ row }) => (
+  //       <Link
+  //         href={`/dashboard/${title.toLowerCase()}/${row.original.slug}`}
+  //         className="text-blue-600 hover:underline capitalize"
+  //       >
+  //         {row.getValue("name")}
+  //       </Link>
+  //     ),
+  //   },
+  //   {
+  //     accessorKey: "slug",
+  //     header: "Slug",
+  //     cell: ({ row }) => row.getValue("slug"),
+  //   },
+  //   {
+  //     id: "actions",
+  //     header: "Actions",
+  //     cell: ({ row }) => (
+  //       <DropdownMenu>
+  //         <DropdownMenuTrigger asChild>
+  //           <Button variant="ghost" className="h-8 w-8 p-0">
+  //             <MoreHorizontal />
+  //           </Button>
+  //         </DropdownMenuTrigger>
+  //         <DropdownMenuContent align="end">
+  //           <DropdownMenuLabel>Actions</DropdownMenuLabel>
+  //           <DropdownMenuItem>
+  //             <Link
+  //               href={`/dashboard/${title.toLowerCase()}/${row.original.slug}`}
+  //               className="w-full flex items-center gap-2 hover:text-green-500 transition-all duration-100 ease-linear"
+  //             >
+  //               <Eye className="size-4" />
+  //               View
+  //             </Link>
+  //           </DropdownMenuItem>
+  //           <DropdownMenuItem>
+  //             <Link
+  //               href={`/dashboard/${title.toLowerCase()}/${
+  //                 row.original.slug
+  //               }/edit`}
+  //               className="w-full flex items-center gap-2 hover:text-blue-500 transition-all duration-100 ease-linear"
+  //             >
+  //               <SquarePen className="size-4" />
+  //               Edit
+  //             </Link>
+  //           </DropdownMenuItem>
+  //           <DropdownMenuItem>
+  //             <div
+  //               onClick={() => handleDelete(row.original.id)}
+  //               className="text-red-600 w-full cursor-pointer flex items-center gap-2 hover:text-red-600 transition-all duration-200 ease-linear"
+  //             >
+  //               <Trash2 className="size-4" />
+  //               Delete
+  //             </div>
+  //           </DropdownMenuItem>
+  //         </DropdownMenuContent>
+  //       </DropdownMenu>
+  //     ),
+  //   },
+  // ];
+
+  // const columns: ColumnDef<T>[] = [
+  //   {
+  //     id: "select",
+  //     header: ({ table }) => (
+  //       <Checkbox
+  //         checked={
+  //           table.getIsAllPageRowsSelected() ||
+  //           (table.getIsSomePageRowsSelected() && "indeterminate")
+  //         }
+  //         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //         aria-label="Select all"
+  //       />
+  //     ),
+  //     cell: ({ row }) => (
+  //       <Checkbox
+  //         checked={row.getIsSelected()}
+  //         onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //         aria-label="Select row"
+  //       />
+  //     ),
+  //     enableSorting: false,
+  //     enableHiding: false,
+  //   },
+  //   {
+  //     accessorKey: "id",
+  //     header: "ID",
+  //     cell: ({ row }) => row.getValue("id"),
+  //   },
+  //   {
+  //     accessorKey: "title", // Add Title
+  //     header: "Title",
+  //     cell: ({ row }) => row.getValue("title"),
+  //   },
+  //   {
+  //     accessorKey: "description", // Add Description
+  //     header: "Description",
+  //     cell: ({ row }) => (
+  //       <div className="truncate max-w-xs" title={row.getValue("description")}>
+  //         {row.getValue("description")}
+  //       </div>
+  //     ),
+  //   },
+  //   {
+  //     accessorKey: "createdAt", // Add Created At
+  //     header: "Created At",
+  //     cell: ({ row }) => {
+  //       const createdAt = new Date(row.getValue("createdAt"));
+  //       return createdAt.toLocaleDateString(); // Format as needed
+  //     },
+  //   },
+  //   {
+  //     id: "actions",
+  //     header: "Actions",
+  //     cell: ({ row }) => (
+  //       <DropdownMenu>
+  //         <DropdownMenuTrigger asChild>
+  //           <Button variant="ghost" className="h-8 w-8 p-0">
+  //             <MoreHorizontal />
+  //           </Button>
+  //         </DropdownMenuTrigger>
+  //         <DropdownMenuContent align="end">
+  //           <DropdownMenuLabel>Actions</DropdownMenuLabel>
+  //           <DropdownMenuItem>
+  //             <Link
+  //               href={`/dashboard/${title.toLowerCase()}/${row.original.slug}`}
+  //               className="w-full flex items-center gap-2 hover:text-green-500 transition-all duration-100 ease-linear"
+  //             >
+  //               <Eye className="size-4" />
+  //               View
+  //             </Link>
+  //           </DropdownMenuItem>
+  //           <DropdownMenuItem>
+  //             <Link
+  //               href={`/dashboard/${title.toLowerCase()}/${row.original.slug}/edit`}
+  //               className="w-full flex items-center gap-2 hover:text-blue-500 transition-all duration-100 ease-linear"
+  //             >
+  //               <SquarePen className="size-4" />
+  //               Edit
+  //             </Link>
+  //           </DropdownMenuItem>
+  //           <DropdownMenuItem>
+  //             <div
+  //               onClick={() => handleDelete(row.original.id)}
+  //               className="text-red-600 w-full cursor-pointer flex items-center gap-2 hover:text-red-600 transition-all duration-200 ease-linear"
+  //             >
+  //               <Trash2 className="size-4" />
+  //               Delete
+  //             </div>
+  //           </DropdownMenuItem>
+  //         </DropdownMenuContent>
+  //       </DropdownMenu>
+  //     ),
+  //   },
+  // ];
+  
   const columns: ColumnDef<T>[] = [
     {
       id: "select",
@@ -133,28 +327,36 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
       cell: ({ row }) => row.getValue("id"),
     },
     {
-      accessorKey: "name",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Name <ArrowUpDown />
-        </Button>
-      ),
+      accessorKey: "title", // Add Title
+      header: "Title",
+      cell: ({ row }) => row.getValue("title"),
+    },
+    {
+      accessorKey: "description", // Add Description
+      header: "Description",
       cell: ({ row }) => (
-        <Link
-          href={`/dashboard/${title.toLowerCase()}/${row.original.slug}`}
-          className="text-blue-600 hover:underline capitalize"
-        >
-          {row.getValue("name")}
-        </Link>
+        <div className="truncate max-w-xs" title={row.getValue("description")}>
+          {row.getValue("description")}
+        </div>
       ),
     },
     {
-      accessorKey: "slug",
-      header: "Slug",
-      cell: ({ row }) => row.getValue("slug"),
+      accessorKey: "categories", // Add Categories
+      header: "Categories",
+      cell: ({ row }) => {
+        const categories = row.getValue("categories") as { name: string }[];
+        return categories?.length
+          ? categories.map((category) => category.name).join(", ")
+          : "None";
+      },
+    },
+    {
+      accessorKey: "createdAt", // Add Created At
+      header: "Created At",
+      cell: ({ row }) => {
+        const createdAt = new Date(row.getValue("createdAt"));
+        return createdAt.toLocaleDateString(); // Format as needed
+      },
     },
     {
       id: "actions",
@@ -179,9 +381,7 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Link
-                href={`/dashboard/${title.toLowerCase()}/${
-                  row.original.slug
-                }/edit`}
+                href={`/dashboard/${title.toLowerCase()}/${row.original.slug}/edit`}
                 className="w-full flex items-center gap-2 hover:text-blue-500 transition-all duration-100 ease-linear"
               >
                 <SquarePen className="size-4" />
@@ -202,6 +402,7 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
       ),
     },
   ];
+  
 
   const table = useReactTable({
     data: tableData,
@@ -223,7 +424,7 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
       <div className="flex items-center py-4 justify-between space-x-5">
         <Input
           placeholder={`Filter by name...`}
-          value={(table.getColumn("name")?.getFilterValue() as string) || ""}
+          value={(table.getColumn("title")?.getFilterValue() as string) || ""}
           onChange={(e) =>
             table.getColumn("name")?.setFilterValue(e.target.value)
           }

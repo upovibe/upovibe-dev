@@ -10,7 +10,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Tag } from "lucide-react";
+import {Tags} from "lucide-react";
 
 const page = async () => {
   const category = await prisma.category.findMany();
@@ -38,7 +38,7 @@ const page = async () => {
         </BreadcrumbList>
       </Breadcrumb>
       <h1 className="text-2xl font-bold flex items-center gap-2">
-        <Tag className="size-5" />
+        <Tags className="size-5" />
         Categories
       </h1>
       <TableLayout data={category} title="Category" deleteRow={deleteRow} />
