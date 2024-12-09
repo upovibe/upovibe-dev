@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import { Tag } from "lucide-react";
 import FormLayout from "@/components/dashboardUi/FormLayout";
-import { editProject } from "@/app/api/crude/formActions";
+import { editCategory } from "@/app/api/crude/formActions";
 
 interface PageProps {
   params: {
@@ -20,16 +20,16 @@ interface PageProps {
 }
 
 const page = async ({ params }: PageProps) => {
-  const project = await prisma.project.findUnique({
+  const category = await prisma.category.findUnique({
     where: {
       slug: params.slug,
     },
   });
 
-  if (!project || !project.id) {
+  if (!category || !category.id) {
     return (
       <div>
-        <h1 className="text-2xl font-bold">Project Not Found</h1>
+        <h1 className="text-2xl font-bold">Category Not Found</h1>
       </div>
     );
   }
@@ -46,12 +46,12 @@ const page = async ({ params }: PageProps) => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href="/dashboard/project">project</Link>
+            <Link href="/dashboard/category">Category</Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href={`/dashboard/project/${project.slug}`}>
-              {project.slug}
+            <Link href={`/dashboard/category/${category.slug}`}>
+              {category.slug}
             </Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -63,22 +63,21 @@ const page = async ({ params }: PageProps) => {
       <div className="flex flex-col gap-2">
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <Tag className="size-5" />
-          Edit {project.slug}
+          Edit {category.slug}
         </h1>
         <FormLayout
-          fields={["title", "description", "image"]}
+          fields={["title", "description"]}
           labels={{
-            title: "Project Name",
-            description: "Project Description",
-            image: "images/project",
+            title: "Category Name",
+            description: "Category Description",
           }}
-          onSubmit={editProject}
-          additionalSubmitArgs={[project.id]}
+          onSubmit={editCategory}
+          additionalSubmitArgs={[category.id]}
           initialData={{
-            title: project.title,
-            description: project.description,
+            title: category.title,
+            description: category.description,
           }}
-          successRedirect={"/dashboard/project"}
+          successRedirect={"/dashboard/category"}
         />
       </div>
     </div>

@@ -30,7 +30,7 @@ const page = async ({ params }: PageProps) => {
   if (!project) {
     return (
       <div>
-        <h1 className="text-  font-bold">project Not Found</h1>
+        <h1 className="text-  font-bold">Project Not Found</h1>
       </div>
     );
   }
