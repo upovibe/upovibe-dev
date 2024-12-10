@@ -38,10 +38,12 @@ const page = () => {
           Add new project
         </h1>
         <FormLayout
-          fields={["title", "description", "image"]}
+          fields={["title", "description", "content", "tags", "image"]}
           labels={{
             title: "Project Name",
             description: "Project Description",
+            content: "Project",
+            tags: "Tags",
             image: "Image",
           }}
           onSubmit={createProject}

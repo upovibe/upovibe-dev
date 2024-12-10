@@ -66,17 +66,22 @@ const page = async ({ params }: PageProps) => {
           Edit {project.slug}
         </h1>
         <FormLayout
-          fields={["title", "description", "image"]}
+          fields={["title", "description", "content", "tags", "image"]}
           labels={{
             title: "Project Name",
             description: "Project Description",
-            image: "images/project",
+            content: "Project",
+            tags: "Tags",
+            image: "Image",
           }}
           onSubmit={editProject}
           additionalSubmitArgs={[project.id]}
           initialData={{
             title: project.title,
             description: project.description,
+            content: project.content,
+            tags: project.tags,
+            image: project.image,
           }}
           successRedirect={"/dashboard/project"}
         />

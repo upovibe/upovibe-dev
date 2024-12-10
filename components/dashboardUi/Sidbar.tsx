@@ -33,7 +33,7 @@ const menuItems = [
 
 const Sidebar: React.FC<SidebarProps> = ({ user }) => {
   const [collapsed, setCollapsed] = useState(false);
-  const [isOpen, setIsOpen] = useState(false); // For small screens
+  const [isOpen, setIsOpen] = useState(false); 
   const router = useRouter();
 
   const handleSignOut = async () => {

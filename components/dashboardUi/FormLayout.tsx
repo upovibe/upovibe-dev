@@ -1,37 +1,28 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import toast from "react-hot-toast";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { prisma } from "@/prisma";
-import { Category } from "@prisma/client";
+import Image from "next/image";
+import { truncateText } from "@/utils/truncateText";
+import { ImageIcon, X } from "lucide-react";
 
 interface FormLayoutProps {
-  fields: Array<"title" | "description" | "image" | "category">;
+  fields: Array<
+    "title" | "name" | "description" | "content" | "image" | "tags" | "score"
+  >;
   labels?: {
     title?: string;
+    name?: string;
     description?: string;
+    content?: string;
     image?: string;
-    category?: string;
+    tags?: string;
+    score?: string;
   };
   onSubmit: (
     formData: FormData,
@@ -40,9 +31,12 @@ interface FormLayoutProps {
   additionalSubmitArgs?: unknown[];
   initialData?: {
     title?: string;
+    name?: string;
     description?: string;
+    content?: string;
     image?: string;
-    categoryId?: string;
+    tags?: string;
+    score?: number;
   };
   successRedirect?: string;
 }
@@ -50,10 +44,13 @@ interface FormLayoutProps {
 const FormLayout: React.FC<FormLayoutProps> = ({
   fields,
   labels = {
-    title: "Name /Title",
-    description: "Description",
+    title: "Title",
+    name: "Name",
+    description: "Short Description",
+    content: "Content",
     image: "Image",
-    category: "Category",
+    tags: "Tags",
+    score: "Score",
   },
   onSubmit,
   additionalSubmitArgs = [],
@@ -61,55 +58,89 @@ const FormLayout: React.FC<FormLayoutProps> = ({
   successRedirect,
 }) => {
   const router = useRouter();
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(initialData?.categoryId || "");
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const data = await prisma.category.findMany();
-      setCategories(data);
-    };
-    if (fields.includes("category")) fetchCategories();
-  }, [fields]);
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    initialData?.image || null
+  );
 
   const validateForm = (formData: FormData) => {
     const newErrors: Record<string, string> = {};
     if (fields.includes("title") && !formData.get("title")) {
-      newErrors.title = "Title/Name is required.";
+      newErrors.title = "Title is required.";
+    }
+    if (fields.includes("name") && !formData.get("name")) {
+      newErrors.name = "Name is required.";
     }
     if (fields.includes("description") && !formData.get("description")) {
       newErrors.description = "Description is required.";
     }
-    if (fields.includes("category") && !formData.get("category")) {
-      newErrors.category = "Category is required.";
+    if (fields.includes("content") && !formData.get("content")) {
+      newErrors.content = "Content is required.";
+    }
+    if (fields.includes("tags") && !formData.get("tags")) {
+      newErrors.tags = "Tags are required.";
+    }
+    if (fields.includes("score")) {
+      const score = formData.get("score");
+      if (
+        !score ||
+        isNaN(Number(score)) ||
+        Number(score) < 0 ||
+        Number(score) > 100
+      ) {
+        newErrors.score = "Score must be a number between 0 and 100.";
+      }
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImagePreview(initialData?.image || null);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setImagePreview(null);
+    const inputElement = document.getElementById("image") as HTMLInputElement;
+    if (inputElement) {
+      inputElement.value = "";
+    }
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    formData.set("categoryId", value);
-  
+
+    // Add existing image back if no new image is selected
+    if (!formData.get("image") && initialData?.image) {
+      formData.append("image", initialData.image);
+    }
+
     if (!validateForm(formData)) {
-      toast.error("All fields are required.");
+      toast.error("Please fill all required fields.");
       return;
     }
-  
+
     const result = await onSubmit(formData, ...additionalSubmitArgs);
-  
+
     if (result.success) {
-      toast.success("Successful.");
+      toast.success("Form submitted successfully!");
       if (successRedirect) {
         router.push(successRedirect);
       }
     } else {
       toast.error(`Error: ${result.error}`);
     }
-  };  
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -129,13 +160,29 @@ const FormLayout: React.FC<FormLayoutProps> = ({
             )}
           </div>
         )}
+        {fields.includes("name") && (
+          <div className="grid w-full gap-1.5">
+            <Label htmlFor="name">{labels.name}</Label>
+            <Input
+              type="text"
+              id="name"
+              name="name"
+              placeholder={`Enter ${labels.name?.toLowerCase()}`}
+              defaultValue={initialData?.name}
+            />
+            {errors.name && (
+              <p className="text-red-500 text-sm">{errors.name}</p>
+            )}
+          </div>
+        )}
         {fields.includes("description") && (
           <div className="grid w-full gap-1.5">
             <Label htmlFor="description">{labels.description}</Label>
-            <Textarea
-              placeholder={`Enter ${labels.description?.toLowerCase()}`}
+            <Input
+              type="text"
               id="description"
               name="description"
+              placeholder={`Enter ${labels.description?.toLowerCase()}`}
               defaultValue={initialData?.description}
             />
             {errors.description && (
@@ -143,68 +190,100 @@ const FormLayout: React.FC<FormLayoutProps> = ({
             )}
           </div>
         )}
-        {fields.includes("image") && (
+        {fields.includes("content") && (
           <div className="grid w-full gap-1.5">
-            <Label htmlFor="image">{labels.image}</Label>
-            <Input id="image" type="file" name="image" />
+            <Label htmlFor="content">{labels.content}</Label>
+            <Textarea
+              placeholder={`Enter ${labels.content?.toLowerCase()}`}
+              id="content"
+              name="content"
+              defaultValue={initialData?.content}
+            />
+            {errors.content && (
+              <p className="text-red-500 text-sm">{errors.content}</p>
+            )}
           </div>
         )}
-        {fields.includes("category") && (
+        {fields.includes("tags") && (
           <div className="grid w-full gap-1.5">
-            <Label htmlFor="category">{labels.category}</Label>
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  aria-expanded={open}
-                  className="justify-between"
-                >
-                  {value
-                    ? categories.find(
-                        (category) => category.id === parseInt(value)
-                      )?.title
-                    : "Select category..."}
-                  <ChevronsUpDown className="opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-full p-0">
-                <Command>
-                  <CommandInput placeholder="Search category..." />
-                  <CommandList>
-                    <CommandEmpty>No category found.</CommandEmpty>
-                    <CommandGroup>
-                      {categories.map((category) => (
-                        <CommandItem
-                          key={category.id}
-                          value={category.id.toString()}
-                          onSelect={(currentValue) => {
-                            setValue(
-                              currentValue === value ? "" : currentValue
-                            );
-                            setOpen(false);
-                          }}
-                          className="cursor-pointer"
-                        >
-                          {category.title}
-                          <Check
-                            className={cn(
-                              "ml-auto",
-                              value === category.id.toString()
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
-            {errors.category && (
-              <p className="text-red-500 text-sm">{errors.category}</p>
+            <Label htmlFor="tags">{labels.tags}</Label>
+            <Input
+              type="text"
+              id="tags"
+              name="tags"
+              placeholder="Enter tags separated by commas (e.g., React,JavaScript,Next.js)"
+              defaultValue={initialData?.tags}
+            />
+            {errors.tags && (
+              <p className="text-red-500 text-sm">{errors.tags}</p>
             )}
+          </div>
+        )}
+        {fields.includes("score") && (
+          <div className="grid w-full gap-1.5">
+            <Label htmlFor="score">{labels.score}</Label>
+            <Input
+              type="number"
+              id="score"
+              name="score"
+              placeholder="Enter score (0-100)"
+              defaultValue={initialData?.score?.toString()}
+              min={0}
+              max={100}
+            />
+            {errors.score && (
+              <p className="text-red-500 text-sm">{errors.score}</p>
+            )}
+          </div>
+        )}
+        {fields.includes("image") && (
+          <div
+            className={`relative grid w-full gap-2 border-2 border-dotted rounded-lg p-4 transition-all duration-200 ${
+              imagePreview ? "justify-start" : "justify-center"
+            }`}
+          >
+            {imagePreview ? (
+              <div className="flex items-end gap-2">
+                <div className="relative size-20">
+                  {/* Image Preview */}
+                  <Image
+                    src={imagePreview}
+                    alt="Selected"
+                    width={200}
+                    height={200}
+                    className=" object-cover rounded"
+                  />
+                  {/* Remove Button */}
+                  <button
+                    type="button"
+                    onClick={handleRemoveImage}
+                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 text-xs hover:bg-red-600 transition-all size-5 flex items-center justify-center"
+                  >
+                    <X />
+                  </button>
+                </div>
+                {/* File Name */}
+                <p className="text-sm text-gray-600">
+                  {truncateText(imagePreview.split("/").pop() || "", 20)}
+                </p>
+              </div>
+            ) : (
+              <label
+                htmlFor="image"
+                className="flex flex-col items-center justify-center text-gray-600 cursor-pointer"
+              >
+                <ImageIcon size={32} className="mb-2" />
+                <span>{labels.image}</span>
+              </label>
+            )}
+            <input
+              id="image"
+              type="file"
+              name="image"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageChange}
+            />
           </div>
         )}
         <Button type="submit" className="w-28 ml-auto">
