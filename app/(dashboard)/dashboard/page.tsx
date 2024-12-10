@@ -1,29 +1,14 @@
-"use client";
-
 import React from "react";
-import { useSession } from "next-auth/react";
-import Unauthorized from "@/components/dashboardUi/Unauthorized";
-import LoaderCircle from "@/components/ui/LoaderCircle";
+import { fetchProjects, fetchBlogs, fetchSkills } from "@/lib/data";
+import Dashboard from "@/components/dashboardUi/Dashboard";
 
-const DashboardPage = () => {
-  const { data: session, status } = useSession();
+// Fetch data from the database
+const page = async () => {
+  const projects = await fetchProjects();
+  const blogs = await fetchBlogs();
+  const skills = await fetchSkills();
 
-  if (status === "loading") {
-    return <LoaderCircle />;
-  }
-
-  if (!session) {
-    return <Unauthorized />;
-  }
-
-  const { user } = session;
-
-  return (
-    <div className="">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
-      <p>Welcome, {user?.name}!</p>
-    </div>
-  );
+  return <Dashboard projects={projects} blogs={blogs} skills={skills} />;
 };
 
-export default DashboardPage;
+export default page;

@@ -1,32 +1,11 @@
-"use client";
+import React from "react";
+import { fetchLatestProjects } from "@/lib/data";
+import Landing from "@/components/landingPageUi/Landing";
 
-import React, { useState, useEffect } from "react";
-import Hero from "@/components/pageUi/Hero";
-import About from "@/components/pageUi/About";
-import SignIn from "@/components/layouts/SignIn";
+const Page = async () => {
+  const projects = await fetchLatestProjects();
 
-const Page = () => {
-  const [isModalOpen, setModalOpen] = useState(false);
-
-  const handleKeyPress = (event: KeyboardEvent) => {
-    if (event.ctrlKey && event.key === "s") {
-      event.preventDefault();
-      setModalOpen(true);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
-  }, []);
-
-  return (
-    <main className="flex flex-col items-center justify-center">
-      <Hero />
-      <About />
-      <SignIn isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
-    </main>
-  );
+  return <Landing projects={projects} />;
 };
 
 export default Page;

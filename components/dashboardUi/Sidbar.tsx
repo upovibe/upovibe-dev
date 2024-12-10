@@ -25,9 +25,9 @@ interface SidebarProps {
 
 const menuItems = [
   { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-  { label: "Category", icon: Tags, href: "/dashboard/category" },
   { label: "Project", icon: FolderGit2, href: "/dashboard/project" },
   { label: "Blog", icon: FilePenLine, href: "/dashboard/blog" },
+  { label: "Skills", icon: Tags, href: "/dashboard/skills" },
   { label: "Settings", icon: Settings, href: "/" },
 ];
 

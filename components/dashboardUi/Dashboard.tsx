@@ -1,33 +1,53 @@
-// 'use client'
+"use client";
 
 import React from "react";
-import { prisma } from "@/prisma";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { useSession } from "next-auth/react";
+import Unauthorized from "@/components/dashboardUi/Unauthorized";
+import LoaderCircle from "@/components/ui/LoaderCircle";
+import CardCount from "@/components/dashboardUi/CardCount";
 
-const Dashboard = async () => {
-    const project = await prisma.project.findMany();
+// Define the interfaces for data types
+interface Project {
+  id: string;
+  title: string;
+}
+
+interface Blog {
+  id: string;
+  title: string;
+}
+
+interface Skill {
+  id: string;
+  name: string;
+}
+
+interface DashboardProps {
+  projects: Project[];
+  blogs: Blog[];
+  skills: Skill[]; // Corrected the typo
+}
+
+const Dashboard: React.FC<DashboardProps> = ({ projects, blogs, skills }) => {
+  const { data: session, status } = useSession();
+
+  if (status === "loading") {
+    return <LoaderCircle />;
+  }
+
+  if (!session) {
+    return <Unauthorized />;
+  }
+
+  const { user } = session;
 
   return (
-    <div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Card Title</CardTitle>
-          <CardDescription>Card Description</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Card Content</p>
-        </CardContent>
-        <CardFooter>
-          <p>Card Footer({project.length})</p>
-        </CardFooter>
-      </Card>
+    <div className="container">
+      <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
+      <p className="mb-6">Welcome, {user?.name}!</p>
+
+      {/* Pass projects, blogs, and skills to CardCount */}
+      <CardCount projects={projects} blogs={blogs} skills={skills} />
     </div>
   );
 };

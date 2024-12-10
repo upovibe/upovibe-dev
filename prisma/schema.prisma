@@ -13,7 +13,8 @@ model Project {
   description String
   slug        String     @unique
   image       String?
-  categories  Category[] @relation("ProjectCategories")
+  tags        String     // A comma-separated string to store project tags
+  content     String     // Detailed content for the project
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 }
@@ -24,17 +25,17 @@ model Blog {
   description String
   slug        String     @unique
   image       String?
-  categories  Category[] @relation("BlogCategories")
+  tags        String     // A comma-separated string to store blog tags
+  content     String     // Detailed content for the blog
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 }
 
-model Category {
-  id          Int       @id @default(autoincrement())
-  title       String    @unique
-  description String
-  slug        String    @unique
-  createdAt   DateTime  @default(now())
-  projects    Project[] @relation("ProjectCategories")
-  blogs       Blog[]    @relation("BlogCategories")
+model Skill {
+  id          Int        @id @default(autoincrement())
+  name        String     @unique // Skill name (e.g., "JavaScript")
+  image       String?    // Optional image URL for the skill
+  score       Int        // Skill proficiency score (out of 100)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
