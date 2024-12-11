@@ -5,13 +5,13 @@ import { User } from "next-auth";
 import Link from "next/link";
 import {
   LayoutDashboard,
-  Tags,
   FolderGit2,
   FilePenLine,
   Settings,
   LogOut,
   PanelRightClose,
   PanelLeftClose,
+  Lightbulb,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -27,7 +27,7 @@ const menuItems = [
   { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
   { label: "Project", icon: FolderGit2, href: "/dashboard/project" },
   { label: "Blog", icon: FilePenLine, href: "/dashboard/blog" },
-  { label: "Skills", icon: Tags, href: "/dashboard/skills" },
+  { label: "Skill", icon: Lightbulb, href: "/dashboard/skill" },
   { label: "Settings", icon: Settings, href: "/" },
 ];
 
@@ -66,7 +66,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
         className={`fixed top-0 left-0 h-full bg-white z-50 shadow-lg md:shadow-none transform transition-all duration-300 md:relative md:translate-x-0 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:block ${
-          collapsed ? "w-14" : "w-64"
+          collapsed ? "w-14 min-w-14" : "w-64 min-w-64"
         } flex flex-col justify-between p-2 border rounded-lg`}
       >
         <ul className="flex flex-col gap-2">

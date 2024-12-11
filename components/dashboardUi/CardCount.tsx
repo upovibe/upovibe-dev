@@ -67,7 +67,7 @@ const CardCount: React.FC<CardCountProps> = ({ projects, blogs, skills }) => {
         iconClassName="text-purple-500"
         titleColor="text-gray-800"
         countColor="text-purple-600"
-        link="/dashboard/skills"
+        link="/dashboard/skill"
       />
     </div>
   );

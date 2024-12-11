@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
+  Row,
   ColumnDef,
   SortingState,
   ColumnFiltersState,
@@ -36,7 +37,7 @@ import {
   getPaginationRowModel,
 } from "@tanstack/react-table";
 import {
-  ArrowUpDown,
+  // ArrowUpDown,
   MoreHorizontal,
   ChevronDown,
   PlusSquare,
@@ -47,6 +48,7 @@ import {
   Trash2,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 // Define generic types for TableLayout
 type TableLayoutProps<T> = {
@@ -104,7 +106,54 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
   //     }
   //   };
 
-  
+  // Dynamically infer columns from data
+  const inferredColumns = Object.keys(data[0] || {}).map((key) => {
+    if (key === "id") {
+      return {
+        accessorKey: key,
+        header: "ID",
+        cell: ({ row }: { row: Row<T> }) => row.getValue(key),
+      };
+    }
+    if (key === "createdAt" || key === "updatedAt") {
+      return {
+        accessorKey: key,
+        header: key
+          .replace(/([A-Z])/g, " $1")
+          .replace(/^./, (str) => str.toUpperCase()),
+        cell: ({ row }: { row: Row<T> }) =>
+          new Date(row.getValue(key)).toLocaleDateString(),
+      };
+    }
+    if (key === "image") {
+      return {
+        accessorKey: key,
+        header: "Image",
+        cell: ({ row }: { row: Row<T> }) => (
+          <Image
+            src={row.getValue(key)}
+            alt={title}
+            width={20}
+            height={20}
+            className="size-10 object-cover rounded"
+          />
+        ),
+      };
+    }
+    return {
+      accessorKey: key,
+      header: key
+        .replace(/([A-Z])/g, " $1")
+        .replace(/^./, (str) => str.toUpperCase()),
+      cell: ({ row }: { row: Row<T> }) => (
+        <div className="truncate max-w-xs" title={row.getValue(key)}>
+          {row.getValue(key)}
+        </div>
+      ),
+    };
+  });
+
+  // Add default actions column
   const columns: ColumnDef<T>[] = [
     {
       id: "select",
@@ -128,43 +177,52 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
       enableSorting: false,
       enableHiding: false,
     },
-    {
-      accessorKey: "id",
-      header: "ID",
-      cell: ({ row }) => row.getValue("id"),
-    },
-    {
-      accessorKey: "title", // Add Title
-      header: "Title",
-      cell: ({ row }) => row.getValue("title"),
-    },
-    {
-      accessorKey: "description", // Add Description
-      header: "Description",
-      cell: ({ row }) => (
-        <div className="truncate max-w-xs" title={row.getValue("description")}>
-          {row.getValue("description")}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "categories", // Add Categories
-      header: "Categories",
-      cell: ({ row }) => {
-        const categories = row.getValue("categories") as { name: string }[];
-        return categories?.length
-          ? categories.map((category) => category.name).join(", ")
-          : "None";
-      },
-    },
-    {
-      accessorKey: "createdAt", // Add Created At
-      header: "Created At",
-      cell: ({ row }) => {
-        const createdAt = new Date(row.getValue("createdAt"));
-        return createdAt.toLocaleDateString(); // Format as needed
-      },
-    },
+    ...inferredColumns,
+    // {
+    //   id: "actions",
+    //   header: "Actions",
+    //   cell: ({ row }) => (
+    //     <DropdownMenu>
+    //       <DropdownMenuTrigger asChild>
+    //         <Button variant="ghost" className="h-8 w-8 p-0">
+    //           <MoreHorizontal />
+    //         </Button>
+    //       </DropdownMenuTrigger>
+    //       <DropdownMenuContent align="end">
+    //         <DropdownMenuLabel>Actions</DropdownMenuLabel>
+    //         <DropdownMenuItem>
+    //           <Link
+    //             href={`/dashboard/${title.toLowerCase()}/${row.original.slug}`}
+    //             className="w-full flex items-center gap-2 hover:text-green-500 transition-all duration-100 ease-linear"
+    //           >
+    //             <Eye className="size-4" />
+    //             View
+    //           </Link>
+    //         </DropdownMenuItem>
+    //         <DropdownMenuItem>
+    //           <Link
+    //             href={`/dashboard/${title.toLowerCase()}/${
+    //               row.original.slug
+    //             }/edit`}
+    //             className="w-full flex items-center gap-2 hover:text-blue-500 transition-all duration-100 ease-linear"
+    //           >
+    //             <SquarePen className="size-4" />
+    //             Edit
+    //           </Link>
+    //         </DropdownMenuItem>
+    //         <DropdownMenuItem>
+    //           <div
+    //             onClick={() => handleDelete(row.original.id)}
+    //             className="text-red-600 w-full cursor-pointer flex items-center gap-2 hover:text-red-600 transition-all duration-200 ease-linear"
+    //           >
+    //             <Trash2 className="size-4" />
+    //             Delete
+    //           </div>
+    //         </DropdownMenuItem>
+    //       </DropdownMenuContent>
+    //     </DropdownMenu>
+    //   ),
+    // },
     {
       id: "actions",
       header: "Actions",
@@ -179,7 +237,7 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
               <Link
-                href={`/dashboard/${title.toLowerCase()}/${row.original.slug}`}
+                href={`/dashboard/${title.toLowerCase()}/${row.original.slug || row.original.id}`}
                 className="w-full flex items-center gap-2 hover:text-green-500 transition-all duration-100 ease-linear"
               >
                 <Eye className="size-4" />
@@ -188,7 +246,7 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Link
-                href={`/dashboard/${title.toLowerCase()}/${row.original.slug}/edit`}
+                href={`/dashboard/${title.toLowerCase()}/${row.original.slug || row.original.id}/edit`}
                 className="w-full flex items-center gap-2 hover:text-blue-500 transition-all duration-100 ease-linear"
               >
                 <SquarePen className="size-4" />
@@ -208,8 +266,8 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
         </DropdownMenu>
       ),
     },
+    
   ];
-  
 
   const table = useReactTable({
     data: tableData,
@@ -230,11 +288,21 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
     <div className="w-full">
       <div className="flex items-center py-4 justify-between space-x-5">
         <Input
-          placeholder={`Filter by name...`}
-          value={(table.getColumn("title")?.getFilterValue() as string) || ""}
-          onChange={(e) =>
-            table.getColumn("name")?.setFilterValue(e.target.value)
+          placeholder={`Filter by name or title...`}
+          value={
+            (table.getColumn("name")?.getFilterValue() as string) ||
+            (table.getColumn("title")?.getFilterValue() as string) ||
+            ""
           }
+          onChange={(e) => {
+            const value = e.target.value;
+            if (table.getColumn("name")) {
+              table.getColumn("name")?.setFilterValue(value);
+            }
+            if (table.getColumn("title")) {
+              table.getColumn("title")?.setFilterValue(value);
+            }
+          }}
           className="max-w-sm"
         />
         <div className="flex items-center gap-2 hover:text-green-500 transition-all duration-200 ease-linear">

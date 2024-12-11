@@ -3,32 +3,33 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Button } from "@/components/ui/button"
 
 interface Project {
   id: string;
+  slug: string;
   title: string;
   image: string;
 }
 
-interface ProjectListProps {
+interface ProjectArchiveProps {
   projects: Project[];
 }
 
-const ProjectList: React.FC<ProjectListProps> = ({ projects }) => {
+const ProjectArchive: React.FC<ProjectArchiveProps> = ({ projects }) => {
   return (
     <div className="h-auto flex flex-col items-center container mx-auto py-40 px-6">
-      <h2 className="text-3xl font-bold mb-8 text-center">Projects</h2>
+      <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-14 border-b-2 border-gray-800 pb-2 text-left">
+        Projects
+      </h3>
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
         {projects.map((project) => (
           <Link
-            href={`/project/${project.id}`}
+            href={`/project/${project.slug}`}
             key={project.id}
             className="group relative transition-all ease-linear duration-200 shadow-lg after:absolute after:bg-slate-400 hover:after:bg-slate-400/50 after:h-1/3 after:left-1/2 after:rounded-xl after:w-11/12 after:top-[-15px] after:z-[-1] after:-translate-x-1/2 rounded-b-xl"
           >
-            <div
-              key={project.id}
-              className="overflow-hidden rounded-xl relative"
-            >
+            <div className="overflow-hidden rounded-xl relative">
               {/* Image container with overlay */}
               <div className="relative">
                 <Image
@@ -50,8 +51,11 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects }) => {
           </Link>
         ))}
       </div>
+
+      {/* Corrected Link component for navigation */}
+      <Button variant="ghost" className="ml-auto my-8 py-2"><Link href="/project">View more</Link></Button>
     </div>
   );
 };
 
-export default ProjectList;
+export default ProjectArchive;

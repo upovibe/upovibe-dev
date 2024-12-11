@@ -11,25 +11,25 @@ import {
 import Link from "next/link";
 import { Tag } from "lucide-react";
 import FormLayout from "@/components/dashboardUi/FormLayout";
-import { editBlog } from "@/app/api/crude/formActions";
+import { editSkill } from "@/app/api/crude/formActions";
 
 interface PageProps {
-  params: {
-    slug: string;
-  };
-}
+    params: {
+      id: string;
+    };
+  }
 
 const page = async ({ params }: PageProps) => {
-  const blog = await prisma.blog.findUnique({
+  const skill = await prisma.skill.findUnique({
     where: {
-      slug: params.slug,
-    },
+        id: parseInt(params.id, 10),
+      },
   });
 
-  if (!blog || !blog.id) {
+  if (!skill || !skill.id) {
     return (
       <div>
-        <h1 className="text-2xl font-bold">Blog Not Found</h1>
+        <h1 className="text-2xl font-bold">skill Not Found</h1>
       </div>
     );
   }
@@ -46,12 +46,12 @@ const page = async ({ params }: PageProps) => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href="/dashboard/blog">blog</Link>
+            <Link href="/dashboard/skill">skill</Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href={`/dashboard/blog/${blog.slug}`}>
-              {blog.slug}
+            <Link href={`/dashboard/skill/${skill.id}`}>
+              {skill.id}
             </Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -63,27 +63,23 @@ const page = async ({ params }: PageProps) => {
       <div className="flex flex-col gap-2">
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <Tag className="size-5" />
-          Edit {blog.slug}
+          Edit {skill.name}
         </h1>
         <FormLayout
-          fields={["title", "description", "content", "tags", "image"]}
+          fields={["name", "image", "score"]}
           labels={{
-            title: "Blog Name",
-            description: "Blog Description",
-            content: "Content",
-            tags: "Tags",
+            name: "skill Name",
+            score: "Score",
             image: "Image",
           }}
-          onSubmit={editBlog}
-          additionalSubmitArgs={[blog.id]}
+          onSubmit={editSkill}
+          additionalSubmitArgs={[skill.id]}
           initialData={{
-            title: blog.title,
-            description: blog.description,
-            content: blog.content,
-            tags: blog.tags,
-            image: blog.image,
+            name: skill.name,
+            score: skill.score,
+            image: skill.image,
           }}
-          successRedirect={"/dashboard/blog"}
+          successRedirect={"/dashboard/skill"}
         />
       </div>
     </div>

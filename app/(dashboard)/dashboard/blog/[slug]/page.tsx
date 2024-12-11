@@ -9,9 +9,9 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
-import { Tag } from "lucide-react";
+import { FilePenLine } from "lucide-react";
 import DeleteButton from "@/components/dashboardUi/DeleteButton";
-import { deleteProject } from "@/app/api/crude/formActions";
+import { deleteBlog } from "@/app/api/crude/formActions"; // Correct function for deleting a blog
 import { Button } from "@/components/ui/button";
 
 interface PageProps {
@@ -30,7 +30,7 @@ const page = async ({ params }: PageProps) => {
   if (!blog) {
     return (
       <div>
-        <h1 className="text-  font-bold">Blog Not Found</h1>
+        <h1 className="text-2xl font-bold">Blog Not Found</h1>
       </div>
     );
   }
@@ -58,9 +58,12 @@ const page = async ({ params }: PageProps) => {
       </Breadcrumb>
       <div className="flex flex-col w-full gap-3 border p-2 rounded-lg">
         <h1 className="text-2xl font-bold flex items-center gap-2 capitalize">
-          <Tag className="size-5" />
+          <FilePenLine className="size-5" />
           {blog.title}
         </h1>
+        <h2 className="border-t border-b py-1 text-xl">
+          {blog.description}
+        </h2>
         {/* Image Section */}
         {blog.image && (
           <div className="w-full h-64 relative overflow-hidden rounded-lg border">
@@ -72,14 +75,14 @@ const page = async ({ params }: PageProps) => {
             />
           </div>
         )}
-        <p className="text-gray-600">{blog.description}</p>
+        <p className="text-gray-600">{blog.content}</p>
         <div className="w-full flex items-center gap-2 justify-end">
           <Button className="bg-slate-400 px-2 py-1 rounded-md hover:bg-slate-700 hover:text-white duration-200 ease-linear ">
             <Link href={`/dashboard/blog/${blog.slug}/edit`}>Edit</Link>
           </Button>
           <DeleteButton
-            action={deleteProject}
-            args={[blog.id]}
+            action={deleteBlog}
+            args={[blog.id]} 
             buttonText="Delete"
             successRedirect="/dashboard/blog"
             errorMessage="Error deleting blog"

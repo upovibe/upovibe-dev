@@ -8,8 +8,8 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
-import { FilePenLine } from "lucide-react";
-import { createBlog } from "@/app/api/crude/formActions";
+import { Tag } from "lucide-react";
+import { createSkill } from "@/app/api/crude/formActions";
 import FormLayout from "@/components/dashboardUi/FormLayout";
 
 const page = () => {
@@ -26,7 +26,7 @@ const page = () => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href="/dashboard/blog">blog</Link>
+            <Link href="/dashboard/skill">Skill</Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbPage>Add new</BreadcrumbPage>
@@ -34,21 +34,19 @@ const page = () => {
       </Breadcrumb>
       <div className="flex flex-col gap-2">
         <h1 className="text-2xl font-bold flex items-center gap-2">
-          <FilePenLine className="size-5" />
-          Add new blog
+          <Tag className="size-5" />
+          Add new skill
         </h1>
         <FormLayout
-          fields={["title", "description", "content", "tags", "image"]}
+          fields={["name", "image", "score"]}
           labels={{
-            title: "Blog Name",
-            description: "Blog Description",
-            content: "Content",
-            tags: "Tags",
+            name: "skill Name",
+            score: "Score",
             image: "Image",
           }}
-          onSubmit={createBlog}
+          onSubmit={createSkill}
           initialData={{}}
-          successRedirect={"/dashboard/blog/"}
+          successRedirect={"/dashboard/skill"}
         />
       </div>
     </div>

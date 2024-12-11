@@ -5,7 +5,7 @@ import Hero from "@/components/landingPageUi/Hero";
 import About from "@/components/landingPageUi/About";
 import SignIn from "@/components/layouts/SignIn";
 import Skills from "@/components/landingPageUi/Skills";
-import ProjectList from "@/components/landingPageUi/ProjectList";
+import ProjectArchive from "@/components/landingPageUi/ProjectArchive";
 
 interface Project {
   id: number;
@@ -13,11 +13,19 @@ interface Project {
   image: string;
 }
 
-interface PageProps {
-  projects: Project[];
+interface Skill {
+  id: string;
+  name: string;
+  image: string;
+  score: number;
 }
 
-const Landing: React.FC<PageProps> = ({ projects }) => {
+interface PageProps {
+  projects: Project[];
+  skills: Skill[];
+}
+
+const Landing: React.FC<PageProps> = ({ projects, skills }) => {
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleKeyPress = (event: KeyboardEvent) => {
@@ -36,8 +44,8 @@ const Landing: React.FC<PageProps> = ({ projects }) => {
     <main className="flex flex-col items-center justify-center">
       <Hero />
       <About />
-      <Skills />
-      <ProjectList projects={projects} />
+      <Skills skills={skills} />
+      <ProjectArchive projects={projects} />
       <SignIn isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
     </main>
   );

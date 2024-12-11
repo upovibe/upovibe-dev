@@ -246,18 +246,27 @@ export const editBlog = async (formData: FormData, id: string) => {
 
   let imagePath: string | null = null;
 
-  if (imageFile) {
-    if (!imageFile.type.startsWith("image/")) {
-      return {
-        success: false,
-        error: "Invalid file type. Only images are allowed.",
-      };
+  try {
+    const parsedId = parseInt(id);
+    if (isNaN(parsedId)) throw new Error("Invalid blog ID");
+
+    // Fetch the current blog to get the existing image
+    const existingBlog = await prisma.blog.findUnique({ where: { id: parsedId } });
+    if (!existingBlog) {
+      return { success: false, error: "Blog not found" };
     }
 
-    try {
+    // If a new image is uploaded, process and save it
+    if (imageFile && imageFile.size > 0) {
+      if (!imageFile.type.startsWith("image/")) {
+        return {
+          success: false,
+          error: "Invalid file type. Only images are allowed.",
+        };
+      }
+
       const uploadsDir = path.resolve("./public/uploads");
-      if (!fs.existsSync(uploadsDir))
-        fs.mkdirSync(uploadsDir, { recursive: true });
+      if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 
       const fileName = `${Date.now()}_${imageFile.name}`;
       const filePath = path.join(uploadsDir, fileName);
@@ -265,32 +274,20 @@ export const editBlog = async (formData: FormData, id: string) => {
       fs.writeFileSync(filePath, buffer);
 
       imagePath = `/uploads/${fileName}`;
-    } catch (err) {
-      console.error("Error saving the new image file:", err);
-      return { success: false, error: "Failed to save new image file" };
-    }
-  }
-
-  try {
-    const parsedId = parseInt(id);
-    if (isNaN(parsedId)) throw new Error("Invalid blog ID");
-
-    // Fetch the current blog to get the existing image
-    const existingBlog = await prisma.blog.findUnique({
-      where: { id: parsedId },
-    });
-    if (!existingBlog) {
-      return { success: false, error: "Blog not found" };
+    } else {
+      // Retain the existing image if no new image is uploaded
+      imagePath = existingBlog.image;
     }
 
+    // Update the blog
     const updatedBlog = await prisma.blog.update({
       where: { id: parsedId },
       data: {
         title,
         description,
         slug: title.replace(/\s+/g, "_").toLowerCase(),
-        image: imagePath || existingBlog.image,
-        tags: tags || "", // Update tags
+        image: imagePath,
+        tags: tags || existingBlog.tags || "",
         content,
       },
     });
@@ -402,34 +399,37 @@ export const editSkill = async (formData: FormData, id: string) => {
   const imageFile = formData.get("image") as File | null;
 
   if (!name || !score) {
-    console.error("Missing required fields: name or score");
-    return { success: false, error: "Name and score are required" };
+    throw new Error("Name and score are required");
   }
 
   const parsedScore = parseInt(score);
   if (isNaN(parsedScore) || parsedScore < 0 || parsedScore > 100) {
-    console.error("Invalid score value");
-    return {
-      success: false,
-      error: "Score must be a number between 0 and 100",
-    };
+    throw new Error("Score must be a number between 0 and 100");
   }
 
   let imagePath: string | null = null;
 
-  if (imageFile) {
-    if (!imageFile.type.startsWith("image/")) {
-      console.error("Invalid file type. Only images are allowed.");
-      return {
-        success: false,
-        error: "Invalid file type. Only images are allowed.",
-      };
+  try {
+    const parsedId = parseInt(id);
+    if (isNaN(parsedId)) throw new Error("Invalid skill ID");
+
+    // Fetch the current skill to get the existing image
+    const existingSkill = await prisma.skill.findUnique({ where: { id: parsedId } });
+    if (!existingSkill) {
+      return { success: false, error: "Skill not found" };
     }
 
-    try {
+    // If a new image is uploaded, process and save it
+    if (imageFile && imageFile.size > 0) {
+      if (!imageFile.type.startsWith("image/")) {
+        return {
+          success: false,
+          error: "Invalid file type. Only images are allowed.",
+        };
+      }
+
       const uploadsDir = path.resolve("./public/uploads");
-      if (!fs.existsSync(uploadsDir))
-        fs.mkdirSync(uploadsDir, { recursive: true });
+      if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 
       const fileName = `${Date.now()}_${imageFile.name}`;
       const filePath = path.join(uploadsDir, fileName);
@@ -437,30 +437,18 @@ export const editSkill = async (formData: FormData, id: string) => {
       fs.writeFileSync(filePath, buffer);
 
       imagePath = `/uploads/${fileName}`;
-    } catch (err) {
-      console.error("Error saving the new image file:", err);
-      return { success: false, error: "Failed to save new image file" };
-    }
-  }
-
-  try {
-    const parsedId = parseInt(id);
-    if (isNaN(parsedId)) throw new Error("Invalid skill ID");
-
-    // Fetch the current skill to get the existing image
-    const existingSkill = await prisma.skill.findUnique({
-      where: { id: parsedId },
-    });
-    if (!existingSkill) {
-      return { success: false, error: "Skill not found" };
+    } else {
+      // Retain the existing image if no new image is uploaded
+      imagePath = existingSkill.image;
     }
 
+    // Update the skill
     const updatedSkill = await prisma.skill.update({
       where: { id: parsedId },
       data: {
         name,
         score: parsedScore,
-        image: imagePath || existingSkill.image,
+        image: imagePath, // Use the new image path or retain the old one
       },
     });
 
