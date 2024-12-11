@@ -28,7 +28,7 @@ const SettingsCard: React.FC<SettingsCardProps> = ({ contacts}) => {
         iconClassName="text-teal-500"
         titleColor="text-gray-800"
         countColor="text-teal-600"
-        link="/dashboard/contacts"
+        link="/dashboard/setting/contactlink"
       />
     </div>
   );

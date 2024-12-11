@@ -5,7 +5,7 @@ import Hero from "@/components/landingPageUi/Hero";
 import About from "@/components/landingPageUi/About";
 import SignIn from "@/components/layouts/SignIn";
 import Skills from "@/components/landingPageUi/Skills";
-import Contact from "@/components/landingPageUi/Contact";
+import ContactMe from "@/components/landingPageUi/ContactMe";
 import ProjectArchive from "@/components/landingPageUi/ProjectArchive";
 
 interface Project {
@@ -21,12 +21,20 @@ interface Skill {
   score: number;
 }
 
+interface ContactLink {
+  id: number;
+  name: string;
+  image: string;
+  href: string;
+}
+
 interface PageProps {
   projects: Project[];
   skills: Skill[];
+  contactlinks: ContactLink[];
 }
 
-const Landing: React.FC<PageProps> = ({ projects, skills }) => {
+const Landing: React.FC<PageProps> = ({ projects, skills, contactlinks }) => {
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleKeyPress = (event: KeyboardEvent) => {
@@ -47,7 +55,7 @@ const Landing: React.FC<PageProps> = ({ projects, skills }) => {
       <About />
       <Skills skills={skills} />
       <ProjectArchive projects={projects} />
-      <Contact/>
+      <ContactMe contactlinks={contactlinks} />
       <SignIn isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
     </main>
   );

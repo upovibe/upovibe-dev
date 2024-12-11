@@ -56,12 +56,14 @@ type TableLayoutProps<T> = {
   data: T[];
   title: string;
   deleteRow: (id: number) => Promise<void>;
+  baseUrl?: string;
 };
 
 const TableLayout = <T extends { id: number; name: string; slug: string }>({
   data,
   title,
   deleteRow,
+  baseUrl,
 }: TableLayoutProps<T>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -70,7 +72,7 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
   const [tableData, setTableData] = useState(data);
   const router = useRouter();
 
-  const addRowUrl = `/dashboard/${title.toLowerCase()}/new`;
+  const addRowUrl = `${baseUrl || `/dashboard/${title.toLowerCase()}`}/new`;
 
   const handleDelete = async (id: number) => {
     try {
@@ -202,7 +204,7 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
               <Link
-                href={`/dashboard/${title.toLowerCase()}/${
+                href={`${baseUrl || `/dashboard/${title.toLowerCase()}`}/${
                   row.original.slug || row.original.id
                 }`}
                 className="w-full flex items-center gap-2 hover:text-green-500 transition-all duration-100 ease-linear"
@@ -213,7 +215,7 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Link
-                href={`/dashboard/${title.toLowerCase()}/${
+                href={`${baseUrl || `/dashboard/${title.toLowerCase()}`}/${
                   row.original.slug || row.original.id
                 }/edit`}
                 className="w-full flex items-center gap-2 hover:text-blue-500 transition-all duration-100 ease-linear"

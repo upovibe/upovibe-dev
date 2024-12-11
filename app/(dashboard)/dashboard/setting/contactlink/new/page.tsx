@@ -26,7 +26,7 @@ const page = () => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href="/dashboard/ContactLink">ContactLink</Link>
+            <Link href="/dashboard/setting/ContactLink">ContactLink</Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbPage>Add new</BreadcrumbPage>
@@ -46,7 +46,7 @@ const page = () => {
           }}
           onSubmit={createContactLink}
           initialData={{}}
-          successRedirect={"/dashboard/ContactLink"}
+          successRedirect={"/dashboard/setting/contactlink"}
         />
       </div>
     </div>
