@@ -30,11 +30,22 @@ model Blog {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
 model Skill {
-  id          Int      @id @default(autoincrement())
-  name        String   // Name of the skill
-  image       String   // Image slug for the skill
-  score       Int      // Score representing skill proficiency
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  name      String // Name of the skill
+  image     String // Image slug for the skill
+  score     Int // Score representing skill proficiency
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
+
+model ContactLink {
+  id        Int      @id @default(autoincrement())
+  name      String
+  image     String
+  href      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+

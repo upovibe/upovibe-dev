@@ -77,7 +77,10 @@ const page = async ({ params }: PageProps) => {
             />
           </div>
         )}
-        <p className="text-gray-600 ">{project.content}</p>
+        <div
+          className="text-gray-600"
+          dangerouslySetInnerHTML={{ __html: project.content }}
+        />
         <div className="w-full flex items-center gap-2 justify-end">
           <Button className="bg-slate-400 px-2 py-1 rounded-md hover:bg-slate-700 hover:text-white duration-200 ease-linear ">
             <Link href={`/dashboard/project/${project.slug}/edit`}>Edit</Link>

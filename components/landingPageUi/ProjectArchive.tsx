@@ -18,7 +18,7 @@ interface ProjectArchiveProps {
 
 const ProjectArchive: React.FC<ProjectArchiveProps> = ({ projects }) => {
   return (
-    <div className="h-auto flex flex-col items-center container mx-auto py-40 px-6">
+    <div className="h-auto flex flex-col items-center container mx-auto py-40 px-6 border-b">
       <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-14 border-b-2 border-gray-800 pb-2 text-left">
         Projects
       </h3>

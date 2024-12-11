@@ -18,13 +18,13 @@ interface Skill {
   name: string;
 }
 
-interface CardCountProps {
+interface DashboardCardProps {
   projects: Project[];
   blogs: Blog[];
   skills: Skill[];
 }
 
-const CardCount: React.FC<CardCountProps> = ({ projects, blogs, skills }) => {
+const DashboardCard: React.FC<DashboardCardProps> = ({ projects, blogs, skills }) => {
   const projectCount = projects.filter((project) => project.title).length;
   const blogCount = blogs.filter((blog) => blog.title).length;
   const skillCount = skills.filter((skill) => skill.name).length;
@@ -73,4 +73,4 @@ const CardCount: React.FC<CardCountProps> = ({ projects, blogs, skills }) => {
   );
 };
 
-export default CardCount;
+export default DashboardCard;

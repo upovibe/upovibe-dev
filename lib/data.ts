@@ -24,3 +24,8 @@ export const fetchBlogs = async () => {
 export const fetchSkills = async () => {
   return await prisma.skill.findMany()
 };
+
+// Fetch all skills
+export const fetchContact = async () => {
+  return await prisma.contactLink.findMany()
+};

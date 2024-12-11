@@ -49,6 +49,7 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import Image from "next/image";
+import { truncateText } from "@/utils/truncateText";
 
 // Define generic types for TableLayout
 type TableLayoutProps<T> = {
@@ -145,11 +146,20 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
       header: key
         .replace(/([A-Z])/g, " $1")
         .replace(/^./, (str) => str.toUpperCase()),
-      cell: ({ row }: { row: Row<T> }) => (
-        <div className="truncate max-w-xs" title={row.getValue(key)}>
-          {row.getValue(key)}
-        </div>
-      ),
+      cell: ({ row }: { row: Row<T> }) => {
+        const cellValue = row.getValue(key);
+        if (typeof cellValue !== "string") {
+          return <div>Invalid data</div>;
+        }
+        const truncatedValue = truncateText(cellValue, 50);
+
+        return (
+          <div
+            className="truncate max-w-xs"
+            dangerouslySetInnerHTML={{ __html: truncatedValue }}
+          />
+        );
+      },
     };
   });
 
@@ -178,51 +188,6 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
       enableHiding: false,
     },
     ...inferredColumns,
-    // {
-    //   id: "actions",
-    //   header: "Actions",
-    //   cell: ({ row }) => (
-    //     <DropdownMenu>
-    //       <DropdownMenuTrigger asChild>
-    //         <Button variant="ghost" className="h-8 w-8 p-0">
-    //           <MoreHorizontal />
-    //         </Button>
-    //       </DropdownMenuTrigger>
-    //       <DropdownMenuContent align="end">
-    //         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-    //         <DropdownMenuItem>
-    //           <Link
-    //             href={`/dashboard/${title.toLowerCase()}/${row.original.slug}`}
-    //             className="w-full flex items-center gap-2 hover:text-green-500 transition-all duration-100 ease-linear"
-    //           >
-    //             <Eye className="size-4" />
-    //             View
-    //           </Link>
-    //         </DropdownMenuItem>
-    //         <DropdownMenuItem>
-    //           <Link
-    //             href={`/dashboard/${title.toLowerCase()}/${
-    //               row.original.slug
-    //             }/edit`}
-    //             className="w-full flex items-center gap-2 hover:text-blue-500 transition-all duration-100 ease-linear"
-    //           >
-    //             <SquarePen className="size-4" />
-    //             Edit
-    //           </Link>
-    //         </DropdownMenuItem>
-    //         <DropdownMenuItem>
-    //           <div
-    //             onClick={() => handleDelete(row.original.id)}
-    //             className="text-red-600 w-full cursor-pointer flex items-center gap-2 hover:text-red-600 transition-all duration-200 ease-linear"
-    //           >
-    //             <Trash2 className="size-4" />
-    //             Delete
-    //           </div>
-    //         </DropdownMenuItem>
-    //       </DropdownMenuContent>
-    //     </DropdownMenu>
-    //   ),
-    // },
     {
       id: "actions",
       header: "Actions",
@@ -237,7 +202,9 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
               <Link
-                href={`/dashboard/${title.toLowerCase()}/${row.original.slug || row.original.id}`}
+                href={`/dashboard/${title.toLowerCase()}/${
+                  row.original.slug || row.original.id
+                }`}
                 className="w-full flex items-center gap-2 hover:text-green-500 transition-all duration-100 ease-linear"
               >
                 <Eye className="size-4" />
@@ -246,7 +213,9 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Link
-                href={`/dashboard/${title.toLowerCase()}/${row.original.slug || row.original.id}/edit`}
+                href={`/dashboard/${title.toLowerCase()}/${
+                  row.original.slug || row.original.id
+                }/edit`}
                 className="w-full flex items-center gap-2 hover:text-blue-500 transition-all duration-100 ease-linear"
               >
                 <SquarePen className="size-4" />
@@ -266,7 +235,6 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
         </DropdownMenu>
       ),
     },
-    
   ];
 
   const table = useReactTable({

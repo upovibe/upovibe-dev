@@ -10,10 +10,18 @@ import toast from "react-hot-toast";
 import Image from "next/image";
 import { truncateText } from "@/utils/truncateText";
 import { ImageIcon, X } from "lucide-react";
+import QuillEditor from "@/components/dashboardUi/QuillEditor";
 
 interface FormLayoutProps {
   fields: Array<
-    "title" | "name" | "description" | "content" | "image" | "tags" | "score"
+    | "title"
+    | "name"
+    | "description"
+    | "content"
+    | "image"
+    | "tags"
+    | "score"
+    | "href"
   >;
   labels?: {
     title?: string;
@@ -23,6 +31,7 @@ interface FormLayoutProps {
     image?: string;
     tags?: string;
     score?: string;
+    href?: string;
   };
   onSubmit: (
     formData: FormData,
@@ -37,6 +46,7 @@ interface FormLayoutProps {
     image?: string;
     tags?: string;
     score?: number;
+    href?: string;
   };
   successRedirect?: string;
 }
@@ -51,6 +61,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
     image: "Image",
     tags: "Tags",
     score: "Score",
+    href: "URL",
   },
   onSubmit,
   additionalSubmitArgs = [],
@@ -79,6 +90,9 @@ const FormLayout: React.FC<FormLayoutProps> = ({
     }
     if (fields.includes("tags") && !formData.get("tags")) {
       newErrors.tags = "Tags are required.";
+    }
+    if (fields.includes("href") && !formData.get("href")) {
+      newErrors.href = "URL is required.";
     }
     if (fields.includes("score")) {
       const score = formData.get("score");
@@ -175,14 +189,28 @@ const FormLayout: React.FC<FormLayoutProps> = ({
             )}
           </div>
         )}
+        {fields.includes("href") && (
+          <div className="grid w-full gap-1.5">
+            <Label htmlFor="href">{labels.href}</Label>
+            <Input
+              type="url"
+              id="href"
+              name="href"
+              placeholder={`Enter ${labels.href?.toLowerCase()}`}
+              defaultValue={initialData?.href}
+            />
+            {errors.href && (
+              <p className="text-red-500 text-sm">{errors.href}</p>
+            )}
+          </div>
+        )}
         {fields.includes("description") && (
           <div className="grid w-full gap-1.5">
             <Label htmlFor="description">{labels.description}</Label>
-            <Input
-              type="text"
+            <Textarea
+              placeholder={`Enter ${labels.description?.toLowerCase()}`}
               id="description"
               name="description"
-              placeholder={`Enter ${labels.description?.toLowerCase()}`}
               defaultValue={initialData?.description}
             />
             {errors.description && (
@@ -190,7 +218,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
             )}
           </div>
         )}
-        {fields.includes("content") && (
+        {/* {fields.includes("content") && (
           <div className="grid w-full gap-1.5">
             <Label htmlFor="content">{labels.content}</Label>
             <Textarea
@@ -198,6 +226,31 @@ const FormLayout: React.FC<FormLayoutProps> = ({
               id="content"
               name="content"
               defaultValue={initialData?.content}
+            />
+            {errors.content && (
+              <p className="text-red-500 text-sm">{errors.content}</p>
+            )}
+          </div>
+        )} */}
+        {fields.includes("content") && (
+          <div className="grid w-full gap-1.5">
+            <Label htmlFor="content">{labels.content}</Label>
+            <QuillEditor
+              initialValue={initialData?.content || ""}
+              onChange={(value: string) => {
+                const hiddenInput = document.getElementById(
+                  "hidden-content-input"
+                ) as HTMLInputElement;
+                if (hiddenInput) {
+                  hiddenInput.value = value;
+                }
+              }}
+            />
+            <input
+              type="hidden"
+              id="hidden-content-input"
+              name="content"
+              defaultValue={initialData?.content || ""}
             />
             {errors.content && (
               <p className="text-red-500 text-sm">{errors.content}</p>

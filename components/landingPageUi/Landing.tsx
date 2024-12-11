@@ -5,6 +5,7 @@ import Hero from "@/components/landingPageUi/Hero";
 import About from "@/components/landingPageUi/About";
 import SignIn from "@/components/layouts/SignIn";
 import Skills from "@/components/landingPageUi/Skills";
+import Contact from "@/components/landingPageUi/Contact";
 import ProjectArchive from "@/components/landingPageUi/ProjectArchive";
 
 interface Project {
@@ -46,6 +47,7 @@ const Landing: React.FC<PageProps> = ({ projects, skills }) => {
       <About />
       <Skills skills={skills} />
       <ProjectArchive projects={projects} />
+      <Contact/>
       <SignIn isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
     </main>
   );

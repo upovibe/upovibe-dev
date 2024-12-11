@@ -482,3 +482,144 @@ export const deleteSkill = async (id: string) => {
     };
   }
 };
+
+// ---------------- ContactLink ----------------
+
+
+// Create a new ContactLink
+export const createContactLink = async (formData: FormData) => {
+  const name = formData.get("name") as string | null;
+  const href = formData.get("href") as string | null;
+  const imageFile = formData.get("image") as File | null;
+
+  if (!name || !href) {
+    console.error("Missing required fields: name or href");
+    return { success: false, error: "Name and href are required" };
+  }
+
+  let imagePath: string | null = null;
+
+  if (imageFile) {
+    if (!imageFile.type.startsWith("image/")) {
+      console.error("Invalid file type. Only images are allowed.");
+      return {
+        success: false,
+        error: "Invalid file type. Only images are allowed.",
+      };
+    }
+
+    try {
+      const uploadsDir = path.resolve("./public/uploads");
+      if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+
+      const fileName = `${Date.now()}_${imageFile.name}`;
+      const filePath = path.join(uploadsDir, fileName);
+      const buffer = Buffer.from(await imageFile.arrayBuffer());
+      fs.writeFileSync(filePath, buffer);
+
+      imagePath = `/uploads/${fileName}`;
+    } catch (err) {
+      console.error("Error saving the image file:", err);
+      return { success: false, error: "Failed to save image file" };
+    }
+  }
+
+  try {
+    await prisma.contactLink.create({
+      data: {
+        name,
+        href,
+        image: imagePath || "",
+      },
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error creating contact link:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+};
+
+// Edit a ContactLink
+export const editContactLink = async (formData: FormData, id: string) => {
+  const name = formData.get("name") as string | null;
+  const href = formData.get("href") as string | null;
+  const imageFile = formData.get("image") as File | null;
+
+  if (!name || !href) {
+    throw new Error("Name and href are required");
+  }
+
+  let imagePath: string | null = null;
+
+  try {
+    const parsedId = parseInt(id);
+    if (isNaN(parsedId)) throw new Error("Invalid contact link ID");
+
+    const existingContactLink = await prisma.contactLink.findUnique({ where: { id: parsedId } });
+    if (!existingContactLink) {
+      return { success: false, error: "Contact link not found" };
+    }
+
+    if (imageFile && imageFile.size > 0) {
+      if (!imageFile.type.startsWith("image/")) {
+        return {
+          success: false,
+          error: "Invalid file type. Only images are allowed.",
+        };
+      }
+
+      const uploadsDir = path.resolve("./public/uploads");
+      if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+
+      const fileName = `${Date.now()}_${imageFile.name}`;
+      const filePath = path.join(uploadsDir, fileName);
+      const buffer = Buffer.from(await imageFile.arrayBuffer());
+      fs.writeFileSync(filePath, buffer);
+
+      imagePath = `/uploads/${fileName}`;
+    } else {
+      imagePath = existingContactLink.image;
+    }
+
+    const updatedContactLink = await prisma.contactLink.update({
+      where: { id: parsedId },
+      data: {
+        name,
+        href,
+        image: imagePath,
+      },
+    });
+
+    return { success: true, contactLink: updatedContactLink };
+  } catch (error) {
+    console.error("Error editing contact link:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+};
+
+// Delete a ContactLink
+export const deleteContactLink = async (id: string) => {
+  try {
+    const parsedId = parseInt(id);
+    if (isNaN(parsedId)) throw new Error("Invalid contact link ID");
+
+    await prisma.contactLink.delete({ where: { id: parsedId } });
+
+    revalidatePath("/dashboard/contact-links");
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting contact link:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+};
