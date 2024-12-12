@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { Clock12 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import CopyLinkButton from "@/components/ui/CopyLinkButton";
+import FroalaContentView from "@/components/ui/FroalaContentView";
 
 interface PageProps {
   params: {
@@ -84,8 +85,10 @@ const Page = async ({ params }: PageProps) => {
           </div>
           <CopyLinkButton />
         </div>
-        <div className="prose max-w-none mb-6 overflow-hidden h-auto w-full">{project.content}</div>
-        <Separator className="my-10"/>
+        <div className="prose max-w-none mb-6 overflow-hidden h-auto w-full">
+          <FroalaContentView model={project.content} />
+        </div>
+        <Separator className="my-10" />
         <div className="text-sm text-gray-500 flex justify-between">
           <div className="flex items-center gap-0.5">
             <span className="hidden lg:inline-flex">Published:</span>

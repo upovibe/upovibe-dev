@@ -13,6 +13,7 @@ import { FilePenLine } from "lucide-react";
 import DeleteButton from "@/components/dashboardUi/DeleteButton";
 import { deleteBlog } from "@/app/api/crude/formActions"; // Correct function for deleting a blog
 import { Button } from "@/components/ui/button";
+import FroalaContentView from "@/components/ui/FroalaContentView";
 
 interface PageProps {
   params: {
@@ -61,9 +62,7 @@ const page = async ({ params }: PageProps) => {
           <FilePenLine className="size-5" />
           {blog.title}
         </h1>
-        <h2 className="border-t border-b py-1 text-xl">
-          {blog.description}
-        </h2>
+        <h2 className="border-t border-b py-1 text-xl">{blog.description}</h2>
         {/* Image Section */}
         {blog.image && (
           <div className="w-full h-64 relative overflow-hidden rounded-lg border">
@@ -75,14 +74,16 @@ const page = async ({ params }: PageProps) => {
             />
           </div>
         )}
-        <p className="text-gray-600">{blog.content}</p>
+        <div className="prose max-w-none mb-6 overflow-hidden h-auto w-full">
+          <FroalaContentView model={blog.content} />
+        </div>
         <div className="w-full flex items-center gap-2 justify-end">
           <Button className="bg-slate-400 px-2 py-1 rounded-md hover:bg-slate-700 hover:text-white duration-200 ease-linear ">
             <Link href={`/dashboard/blog/${blog.slug}/edit`}>Edit</Link>
           </Button>
           <DeleteButton
             action={deleteBlog}
-            args={[blog.id]} 
+            args={[blog.id]}
             buttonText="Delete"
             successRedirect="/dashboard/blog"
             errorMessage="Error deleting blog"

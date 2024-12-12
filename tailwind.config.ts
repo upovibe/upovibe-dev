@@ -9,6 +9,15 @@ export default {
   ],
   theme: {
   	extend: {
+		keyframes: {
+			shine: {
+			  '0%': { boxShadow: '0 0 0 0 rgba(255, 255, 255, 0.5)' },
+			  '100%': { boxShadow: '0 0 0 10px rgba(255, 255, 255, 0)' },
+			}
+		  },
+		  animation: {
+			shine: 'shine 2s infinite',
+		  },
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',

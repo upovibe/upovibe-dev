@@ -2,17 +2,8 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
+import ConfirmDeleteDialog from './ConfirmDeleteDialog';
 import { useRouter } from "next/navigation";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import toast from "react-hot-toast";
 import { Loader } from "lucide-react";
 
@@ -41,7 +32,6 @@ const DeleteButton: React.FC<ActionButtonProps> = ({
 
   const handleConfirm = async () => {
     setIsLoading(true);
-    setIsDialogOpen(false);
 
     try {
       const result = await action(...args);
@@ -59,11 +49,8 @@ const DeleteButton: React.FC<ActionButtonProps> = ({
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
+      setIsDialogOpen(false);
     }
-  };
-
-  const handleCancel = () => {
-    setIsDialogOpen(false);
   };
 
   return (
@@ -76,24 +63,11 @@ const DeleteButton: React.FC<ActionButtonProps> = ({
         )}
       </Button>
 
-      {/* AlertDialog for confirmation */}
-      <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete content
-              from the database.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleCancel}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirm}>
-              Continue
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ConfirmDeleteDialog
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        onConfirm={handleConfirm}
+      />
     </div>
   );
 };

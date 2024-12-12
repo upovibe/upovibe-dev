@@ -50,6 +50,7 @@ import {
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { truncateText } from "@/utils/truncateText";
+import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 
 // Define generic types for TableLayout
 type TableLayoutProps<T> = {
@@ -69,21 +70,44 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
+  const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
+  const [rowIdToDelete, setRowIdToDelete] = useState<number | null>(null);
   const [tableData, setTableData] = useState(data);
   const router = useRouter();
 
   const addRowUrl = `${baseUrl || `/dashboard/${title.toLowerCase()}`}/new`;
 
   const handleDelete = async (id: number) => {
-    try {
-      await deleteRow(Number(id));
-      setTableData((prev) => prev.filter((row) => row.id !== id));
-      toast.success("Successful.");
-    } catch (error) {
-      console.error("Error deleting row:", error);
-      toast.error("Error occurred.");
+    setRowIdToDelete(id);
+    setIsConfirmDeleteOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (rowIdToDelete !== null) {
+      try {
+        await deleteRow(rowIdToDelete);
+        setTableData((prev) => prev.filter((row) => row.id !== rowIdToDelete));
+        toast.success("Successful.");
+      } catch (error) {
+        console.error("Error deleting row:", error);
+        toast.error("Error occurred.");
+      } finally {
+        setIsConfirmDeleteOpen(false);
+        setRowIdToDelete(null);
+      }
     }
   };
+
+  // const handleDelete = async (id: number) => {
+  //   try {
+  //     await deleteRow(Number(id));
+  //     setTableData((prev) => prev.filter((row) => row.id !== id));
+  //     toast.success("Successful.");
+  //   } catch (error) {
+  //     console.error("Error deleting row:", error);
+  //     toast.error("Error occurred.");
+  //   }
+  // };
 
   //   const deleteSelectedRows = async () => {
   //     const selectedIds = Object.keys(rowSelection)
@@ -194,47 +218,55 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
       id: "actions",
       header: "Actions",
       cell: ({ row }) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>
-              <Link
-                href={`${baseUrl || `/dashboard/${title.toLowerCase()}`}/${
-                  row.original.slug || row.original.id
-                }`}
-                className="w-full flex items-center gap-2 hover:text-green-500 transition-all duration-100 ease-linear"
-              >
-                <Eye className="size-4" />
-                View
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link
-                href={`${baseUrl || `/dashboard/${title.toLowerCase()}`}/${
-                  row.original.slug || row.original.id
-                }/edit`}
-                className="w-full flex items-center gap-2 hover:text-blue-500 transition-all duration-100 ease-linear"
-              >
-                <SquarePen className="size-4" />
-                Edit
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <div
-                onClick={() => handleDelete(row.original.id)}
-                className="text-red-600 w-full cursor-pointer flex items-center gap-2 hover:text-red-600 transition-all duration-200 ease-linear"
-              >
-                <Trash2 className="size-4" />
-                Delete
-              </div>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem>
+                <Link
+                  href={`${baseUrl || `/dashboard/${title.toLowerCase()}`}/${
+                    row.original.slug || row.original.id
+                  }`}
+                  className="w-full flex items-center gap-2 hover:text-green-500 transition-all duration-100 ease-linear"
+                >
+                  <Eye className="size-4" />
+                  View
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link
+                  href={`${baseUrl || `/dashboard/${title.toLowerCase()}`}/${
+                    row.original.slug || row.original.id
+                  }/edit`}
+                  className="w-full flex items-center gap-2 hover:text-blue-500 transition-all duration-100 ease-linear"
+                >
+                  <SquarePen className="size-4" />
+                  Edit
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <div
+                  onClick={() => handleDelete(row.original.id)}
+                  className="text-red-600 w-full cursor-pointer flex items-center gap-2 hover:text-red-600 transition-all duration-200 ease-linear"
+                >
+                  <Trash2 className="size-4" />
+                  Delete
+                </div>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <ConfirmDeleteDialog
+            isOpen={isConfirmDeleteOpen}
+            onClose={() => setIsConfirmDeleteOpen(false)}
+            onConfirm={handleConfirmDelete}
+          />
+        </>
       ),
     },
   ];
@@ -316,7 +348,7 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
         </Button> */}
         </div>
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border overflow-x-auto">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

@@ -11,6 +11,7 @@ import Image from "next/image";
 import { truncateText } from "@/utils/truncateText";
 import { ImageIcon, X } from "lucide-react";
 import QuillEditor from "@/components/dashboardUi/QuillEditor";
+import FroalaWysiwyg from "@/components/dashboardUi/FroalaWysiwyg";
 
 interface FormLayoutProps {
   fields: Array<
@@ -218,6 +219,31 @@ const FormLayout: React.FC<FormLayoutProps> = ({
             )}
           </div>
         )}
+        {fields.includes("content") && (
+          <div className="grid w-full gap-1.5">
+            <Label htmlFor="content">{labels.content}</Label>
+            <FroalaWysiwyg
+              initialValue={initialData?.content || ""}
+              onChange={(value: string) => {
+                const hiddenInput = document.getElementById(
+                  "hidden-content-input"
+                ) as HTMLInputElement;
+                if (hiddenInput) {
+                  hiddenInput.value = value;
+                }
+              }}
+            />
+            <input
+              type="hidden"
+              id="hidden-content-input"
+              name="content"
+              defaultValue={initialData?.content || ""}
+            />
+            {errors.content && (
+              <p className="text-red-500 text-sm">{errors.content}</p>
+            )}
+          </div>
+        )}
         {/* {fields.includes("content") && (
           <div className="grid w-full gap-1.5">
             <Label htmlFor="content">{labels.content}</Label>
@@ -232,7 +258,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
             )}
           </div>
         )} */}
-        {fields.includes("content") && (
+        {/* {fields.includes("content") && (
           <div className="grid w-full gap-1.5">
             <Label htmlFor="content">{labels.content}</Label>
             <QuillEditor
@@ -256,7 +282,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
               <p className="text-red-500 text-sm">{errors.content}</p>
             )}
           </div>
-        )}
+        )} */}
         {fields.includes("tags") && (
           <div className="grid w-full gap-1.5">
             <Label htmlFor="tags">{labels.tags}</Label>

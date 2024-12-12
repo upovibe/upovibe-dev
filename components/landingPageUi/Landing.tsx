@@ -7,6 +7,7 @@ import SignIn from "@/components/layouts/SignIn";
 import Skills from "@/components/landingPageUi/Skills";
 import ContactMe from "@/components/landingPageUi/ContactMe";
 import ProjectArchive from "@/components/landingPageUi/ProjectArchive";
+import ScrollToTop from "../ui/ScrollToTop";
 
 interface Project {
   id: number;
@@ -57,6 +58,7 @@ const Landing: React.FC<PageProps> = ({ projects, skills, contactlinks }) => {
       <ProjectArchive projects={projects} />
       <ContactMe contactlinks={contactlinks} />
       <SignIn isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+      <ScrollToTop />
     </main>
   );
 };
