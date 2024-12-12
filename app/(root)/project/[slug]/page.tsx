@@ -51,29 +51,29 @@ const Page = async ({ params }: PageProps) => {
   const tags = project.tags.split(",");
 
   return (
-    <div className="w-full h-auto container mx-auto py-12 px-4 flex flex-col lg:flex-row justify-between gap-14">
+    <div className="w-full h-auto container mx-auto py-12 pb-32 px-4 flex flex-col lg:flex-row justify-between gap-14">
       {/* Main Content */}
-      <div className="w-full lg:w-7/12 ">
+      <div className="w-full lg:w-7/12 p-4 border-2 border-gray-200/20 rounded-xl bg-gray-800/50 backdrop-blur-md shadow-lg">
         {project.image && (
-          <div className="w-full flex h-[20rem] border rounded-xl items-center justify-center overflow-hidden shadow">
+          <div className="w-full flex min-h-[10rem] rounded-lg items-center justify-center overflow-hidden shadow">
             <Image
               src={project.image}
               alt={project.title}
-              width={800}
-              height={400}
-              className="rounded-lg object-cover"
+              width={1000}
+              height={500}
+              className="object-center"
             />
           </div>
         )}
 
-        <h1 className="text-4xl text-gray-800 font-bold my-4 capitalize">
+        <h1 className="text-4xl text-gray-100 font-bold my-4 capitalize">
           {project.title}
         </h1>
-        <p className="text-lg text-gray-700 mb-4 border-l-4 pl-4 my-6 capitalize">
+        <p className="text-lg text-gray-200 mb-4 border-l-4 border-gray-500 pl-4 my-6 capitalize">
           {project.description}
         </p>
-        <div className="flex items-center justify-between flex-wrap gap-2 my-4 border-t border-b py-3">
-          <div className="flex items-center gap-0.5">
+        <div className="flex items-center justify-between flex-wrap gap-2 my-4 border-t border-b border-gray-500 py-3">
+          <div className="flex items-center gap-1">
             {tags.map((tag, index) => (
               <span
                 key={index}
@@ -85,7 +85,7 @@ const Page = async ({ params }: PageProps) => {
           </div>
           <CopyLinkButton />
         </div>
-        <div className="prose max-w-none mb-6 overflow-hidden h-auto w-full">
+        <div className="prose max-w-none mb-6 overflow-hidden h-auto w-full text-gray-300 p-4 backdrop-blur-md rounded-xl">
           <FroalaContentView model={project.content} />
         </div>
         <Separator className="my-10" />
@@ -105,8 +105,10 @@ const Page = async ({ params }: PageProps) => {
       {/* End of Main Content */}
 
       {/* Sidebar for other projects */}
-      <div className="w-full lg:w-4/12 lg:border-l lg:pl-8 lg:px-5 px-0 py-5">
-        <h2 className="text-2xl font-bold mb-4">Other Projects</h2>
+      <div className="w-full lg:w-4/12 lg:border-l border-gray-500 lg:pl-8 lg:px-5 px-0 py-5">
+        <h2 className="text-2xl text-white/90 font-bold mb-4">
+          Other Projects
+        </h2>
         <div className="space-y-6">
           {otherProjects.map((otherProject) => {
             const otherCreatedAt = format(
@@ -118,7 +120,7 @@ const Page = async ({ params }: PageProps) => {
                 <Link
                   key={otherProject.id}
                   href={`/project/${otherProject.slug}`}
-                  className="flex gap-4 p-2 hover:bg-gray-100 transition duration-200 rounded-lg"
+                  className="flex gap-4 p-2 hover:bg-gray-100/30 transition duration-200 rounded-lg"
                 >
                   {otherProject.image && (
                     <Image
@@ -130,7 +132,7 @@ const Page = async ({ params }: PageProps) => {
                     />
                   )}
                   <div>
-                    <h3 className="text-lg font-semibold">
+                    <h3 className="text-lg font-semibold text-gray-50">
                       {otherProject.title}
                     </h3>
                     <p className="text-sm text-gray-500">{otherCreatedAt}</p>

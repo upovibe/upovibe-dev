@@ -6,6 +6,7 @@ import Sidebar from "@/components/dashboardUi/Sidbar";
 import Header from "@/components/layouts/Header";
 import Unauthorized from "@/components/dashboardUi/Unauthorized";
 import LoaderCircle from "@/components/ui/LoaderCircle";
+import Footer from "@/components/layouts/Footer";
 
 export default function Layout({
   children,
@@ -31,6 +32,7 @@ export default function Layout({
         {children}
         </div>
       </main>
+      <Footer/>
     </>
   );
 }
