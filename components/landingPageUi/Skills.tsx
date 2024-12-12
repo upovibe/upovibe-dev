@@ -14,7 +14,7 @@ interface SkillsProps {
 
 const Skills: React.FC<SkillsProps> = ({ skills }) => {
   return (
-    <div className="h-auto flex flex-col items-center justify-center container mx-auto py-40 px-6 gap-8 border-b">
+    <div  id="skills" className="h-auto flex flex-col items-center justify-center container mx-auto py-40 px-6 gap-8 border-b">
       <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-10 border-b-2 border-gray-800 pb-2 text-left">
         Skills
       </h3>

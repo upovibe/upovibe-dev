@@ -38,6 +38,16 @@ interface PageProps {
 const Landing: React.FC<PageProps> = ({ projects, skills, contactlinks }) => {
   const [isModalOpen, setModalOpen] = useState(false);
 
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const target = document.getElementById(hash.replace("#", ""));
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, []);
+
   const handleKeyPress = (event: KeyboardEvent) => {
     if (event.ctrlKey && event.key === "u") {
       event.preventDefault();

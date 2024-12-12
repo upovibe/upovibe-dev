@@ -17,7 +17,7 @@ interface ContactMeProps {
 
 const ContactMe: React.FC<ContactMeProps> = ({ contactlinks }) => {
   return (
-    <div className="h-auto flex flex-col items-center container mx-auto py-40 px-6 border-b">
+    <div id="contact" className="h-auto flex flex-col items-center container mx-auto py-40 px-6 border-b">
       <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-14 border-b-2 border-gray-800 pb-2 text-left">
         Contact Me
       </h3>

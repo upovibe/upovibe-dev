@@ -7,7 +7,7 @@ const Page = async () => {
   const skills = await fetchSkills();
   const contactlinks = await fetchContact();
 
-  return <Landing projects={projects} skills={skills} contactlinks={contactlinks}  />; // Pass the skills data
+  return <Landing projects={projects} skills={skills} contactlinks={contactlinks}  />;
 };
 
 export default Page;

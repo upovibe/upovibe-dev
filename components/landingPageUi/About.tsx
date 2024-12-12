@@ -23,7 +23,7 @@ const About = () => {
   }, [images.length]);
 
   return (
-    <div className="h-auto flex flex-col-reverse lg:flex-row items-center container mx-auto py-60 px-6 gap-8 border-b">
+    <div id="about" className="h-auto flex flex-col-reverse lg:flex-row items-center container mx-auto py-60 px-6 gap-8 border-b">
       {/* Left Side (Image & Links) */}
       <div className="w-full lg:w-4/12 flex flex-col items-center gap-6">
         {/* Image Transition Container */}
