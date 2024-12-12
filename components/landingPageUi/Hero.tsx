@@ -5,16 +5,19 @@ import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 function Hero() {
   return (
-    <div id="hero"  className="h-auto border-b w-full container flex flex-col lg:flex-row items-center justify-between py-52 px-6">
+    <div
+      id="hero"
+      className="h-auto border-b w-full container flex flex-col lg:flex-row items-center justify-between py-52 px-6"
+    >
       {/* Left Side (Text Content) */}
       <div className="w-full lg:w-1/2 text-center lg:text-left">
-        <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-300 uppercase mb-2">
+        <h3 className="text-sm font-semibold text-gray-400 uppercase mb-2">
           Fullstack Developer
         </h3>
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-4 lg:text-4xl">
+        <h1 className="text-3xl font-extrabold text-white mb-4 lg:text-4xl">
           Promise Uzor Okwudiri
         </h1>
-        <p className="text-lg text-gray-600 dark:text-gray-400">
+        <p className="text-lg text-gray-300">
           Crafting impactful web solutions with modern technologies. Ready to
           collaborate, innovate, and grow with forward-thinking teams.
         </p>
