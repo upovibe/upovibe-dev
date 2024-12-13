@@ -3,7 +3,9 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+// import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import Lottie from "lottie-react";
+import ProjectData from "@/public/animations/Projects.json";
 import { Separator } from "../ui/separator";
 
 interface Project {
@@ -19,29 +21,13 @@ interface ProjectsListProps {
 
 const ProjectsList: React.FC<ProjectsListProps> = ({ projects }) => {
   return (
-    <div className="h-auto flex flex-col items-center container mx-auto py-10 px-6 gap-14">
+    <div className="flex flex-col items-center container mx-auto py-10 px-6 gap-14 h-screen">
       {/* Lottie Animation */}
-      <div className="w-full flex flex-col lg:flex-row items-center mb-10 h-auto space-x-6">
-        {/* Typing animation at the top */}
-        <div className="w-full hidden lg:block">
-          <DotLottieReact
-            src="https://lottie.host/587bcc1a-ed96-42ae-b158-3b9d388a09a1/EW1Qc6wuqe.lottie"
-            loop
-            autoplay
-            className="max-w-xs"
-          />
-        </div>
-
-        {/* Animated text at the bottom */}
-        <div className="w-full">
-          <DotLottieReact
-            src="https://lottie.host/4eb98f70-5c72-4bb5-9a29-f5d7d32afe87/hU52g8ooVs.lottie"
-            loop
-            autoplay
-            className="w-full"
-          />
-        </div>
-      </div>
+      <Lottie
+          animationData={ProjectData}
+          loop={true}
+          className="max-w-lg flex items-center justify-center mx-auto"
+        />
       <Separator />
       {/* Grid of Projects */}
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">

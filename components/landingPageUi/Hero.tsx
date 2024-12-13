@@ -1,7 +1,9 @@
 "use client";
 
 import React from "react";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+// import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import Lottie from "lottie-react";
+import HeroData from "@/public/animations/Hero.json";
 import { motion } from "framer-motion";
 
 function Hero() {
@@ -13,7 +15,11 @@ function Hero() {
 
   const animationVariants = {
     hidden: { opacity: 0, scale: 0.8 },
-    visible: { opacity: 1, scale: 1, transition: { duration: 1, ease: "easeOut" } },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 1, ease: "easeOut" },
+    },
   };
 
   return (
@@ -21,7 +27,7 @@ function Hero() {
       id="hero"
       initial="hidden"
       animate="visible"
-      className="h-screen border-b border-gray-200/20 w-full container flex flex-col lg:flex-row items-center justify-between py-52 px-6"
+      className="h-screen border-b border-gray-200/20 w-full container flex flex-col lg:flex-row items-center lg:justify-between pt-20 pb-10 px-6 gap-10"
     >
       {/* Left Side (Text Content) */}
       <motion.div
@@ -42,14 +48,15 @@ function Hero() {
 
       {/* Right Side (Lottie Animation) */}
       <motion.div
-        className="w-full lg:w-1/2 flex justify-center items-center"
+        className="w-full lg:w-4/12 flex justify-center items-center"
         variants={animationVariants}
       >
-        <DotLottieReact
+        {/* <DotLottieReact
           src="https://lottie.host/056d4b53-2195-4a1e-b4b1-9269f09b6506/NGOOsDFLR9.json"
           loop
           autoplay
-        />
+        /> */}
+        <Lottie animationData={HeroData} loop={true} className="max-w-lg lg:max-w-full" />
       </motion.div>
     </motion.div>
   );

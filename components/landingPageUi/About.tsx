@@ -2,7 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+// import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import Lottie from "lottie-react";
+import AboutData from "@/public/animations/About.json";
 import { motion } from "framer-motion";
 
 const About = () => {
@@ -39,12 +41,14 @@ const About = () => {
       {/* Left Side (Image & Links) */}
       <div className="w-full lg:w-4/12 flex flex-col items-center relative">
         {/* Lottie Animation */}
-        <DotLottieReact
+        {/* <DotLottieReact
           src="https://lottie.host/fba1246b-5859-408f-bed0-8971d0fa4273/QUlUYRsuNw.lottie"
           loop
           autoplay
           className="absolute -bottom-10 min-w-full md:-bottom-24 md:w-[50rem]"
-        />
+        /> */}
+        <Lottie animationData={AboutData} loop={true} className="absolute max-w-sm -top-24" />
+
         {/* Image Transition */}
         <motion.div
           className="relative size-[200px] flex items-center justify-center rounded-full border-8 border-gray-500 overflow-hidden shadow-xl"
