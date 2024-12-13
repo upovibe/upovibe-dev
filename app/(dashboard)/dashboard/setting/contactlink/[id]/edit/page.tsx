@@ -13,18 +13,23 @@ import { Tag } from "lucide-react";
 import FormLayout from "@/components/dashboardUi/FormLayout";
 import { editContactLink } from "@/app/api/crude/formActions";
 
-interface PageProps {
-    params: {
+
+  interface PageProps {
+    params: Promise<{
       id: string;
-    };
+    }>;
   }
 
-const page = async ({ params }: PageProps) => {
-  const contactLink = await prisma.contactLink.findUnique({
-    where: {
-        id: parseInt(params.id, 10),
+
+  const page: React.FC<PageProps> = async ({ params }: PageProps) => {
+    const resolvedParams = await params;
+    const contactLink = await prisma.contactLink.findUnique({
+      where: {
+        id: parseInt(resolvedParams.id, 10),
       },
-  });
+    });
+
+
 
   if (!contactLink || !contactLink.id) {
     return (

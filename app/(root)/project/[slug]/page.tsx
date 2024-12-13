@@ -9,16 +9,16 @@ import CopyLinkButton from "@/components/ui/CopyLinkButton";
 import FroalaContentView from "@/components/ui/FroalaContentView";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
-const Page = async ({ params }: PageProps) => {
-  // Fetch the current project
+const page: React.FC<PageProps> = async ({ params }: PageProps) => {
+  const resolvedParams = await params;
   const project = await prisma.project.findUnique({
     where: {
-      slug: params.slug,
+      slug: resolvedParams.slug,
     },
   });
 
@@ -26,7 +26,7 @@ const Page = async ({ params }: PageProps) => {
   const otherProjects = await prisma.project.findMany({
     where: {
       NOT: {
-        slug: params.slug,
+        slug: resolvedParams.slug,
       },
     },
     orderBy: {
@@ -149,4 +149,4 @@ const Page = async ({ params }: PageProps) => {
   );
 };
 
-export default Page;
+export default page;

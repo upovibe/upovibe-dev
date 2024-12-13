@@ -5,7 +5,6 @@ import TableLayout from "@/components/dashboardUi/TableLayout";
 import {
   Breadcrumb,
   BreadcrumbItem,
-  // BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
@@ -13,12 +12,24 @@ import {
 import { FilePenLine } from "lucide-react";
 
 const page = async () => {
+  // Fetch blog data from Prisma
   const blog = await prisma.blog.findMany();
 
+  // Delete row handler
   const deleteRow = async (id: number) => {
     "use server";
     await prisma.blog.delete({ where: { id } });
   };
+
+  // Transform the blog data to match the expected format for TableLayout
+  const transformedBlog = blog.map(item => ({
+    id: item.id,
+    name: item.title,
+    slug: item.slug,   
+    image: item.image, 
+    createdAt: item.createdAt.toLocaleString(), // Format createdAt
+    updatedAt: item.updatedAt.toLocaleString(), // Format updatedAt
+  }));
 
   return (
     <div>
@@ -41,7 +52,7 @@ const page = async () => {
         <FilePenLine className="size-5" />
         Blogs
       </h1>
-      <TableLayout data={blog} title="blog" deleteRow={deleteRow} />
+      <TableLayout data={transformedBlog} title="Blog" deleteRow={deleteRow} />
     </div>
   );
 };

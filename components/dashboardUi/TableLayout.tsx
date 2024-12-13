@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation"; // For redirection
+import { useRouter } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -98,40 +98,29 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
     }
   };
 
-  // const handleDelete = async (id: number) => {
+  // const deleteSelectedRows = async () => {
+  //   const selectedIds = Object.keys(rowSelection)
+  //     .filter((key) => rowSelection[key])
+  //     .map(Number); // Ensure IDs are numbers
+
+  //   if (selectedIds.length === 0) return;
+
   //   try {
-  //     await deleteRow(Number(id));
-  //     setTableData((prev) => prev.filter((row) => row.id !== id));
+  //     for (const id of selectedIds) {
+  //       await deleteRow(id); // Use the numeric ID
+  //     }
+
+  //     setTableData((prev) =>
+  //       prev.filter((row) => selectedIds.includes(Number(row.id)))
+  //     );
+
+  //     setRowSelection({});
   //     toast.success("Successful.");
   //   } catch (error) {
-  //     console.error("Error deleting row:", error);
+  //     console.error("Error deleting selected rows:", error);
   //     toast.error("Error occurred.");
   //   }
   // };
-
-  //   const deleteSelectedRows = async () => {
-  //     const selectedIds = Object.keys(rowSelection)
-  //       .filter((key) => rowSelection[key])
-  //       .map(Number); // Ensure IDs are numbers
-
-  //     if (selectedIds.length === 0) return;
-
-  //     try {
-  //       for (const id of selectedIds) {
-  //         await deleteRow(id); // Use the numeric ID
-  //       }
-
-  //       setTableData((prev) =>
-  //         prev.filter((row) => selectedIds.includes(Number(row.id)))
-  //       );
-
-  //       setRowSelection({});
-  //       toast.success("Successful.");
-  //     } catch (error) {
-  //       console.error("Error deleting selected rows:", error);
-  //       toast.error("Error occurred.");
-  //     }
-  //   };
 
   // Dynamically infer columns from data
   const inferredColumns = Object.keys(data[0] || {}).map((key) => {
@@ -230,7 +219,9 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
               <DropdownMenuItem>
                 <Link
                   href={`${baseUrl || `/dashboard/${title.toLowerCase()}`}/${
-                    row.original.slug || row.original.id
+                    row.original.slug?.length > 0
+                      ? row.original.slug
+                      : row.original.id
                   }`}
                   className="w-full flex items-center gap-2 hover:text-green-500 transition-all duration-100 ease-linear"
                 >
@@ -241,7 +232,9 @@ const TableLayout = <T extends { id: number; name: string; slug: string }>({
               <DropdownMenuItem>
                 <Link
                   href={`${baseUrl || `/dashboard/${title.toLowerCase()}`}/${
-                    row.original.slug || row.original.id
+                    row.original.slug?.length > 0
+                      ? row.original.slug
+                      : row.original.id
                   }/edit`}
                   className="w-full flex items-center gap-2 hover:text-blue-500 transition-all duration-100 ease-linear"
                 >

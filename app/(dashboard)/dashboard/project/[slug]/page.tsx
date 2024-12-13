@@ -16,15 +16,16 @@ import { Button } from "@/components/ui/button";
 import FroalaContentView from "@/components/ui/FroalaContentView";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
-const page = async ({ params }: PageProps) => {
+const page: React.FC<PageProps> = async ({ params }: PageProps) => {
+  const resolvedParams = await params;
   const project = await prisma.project.findUnique({
     where: {
-      slug: params.slug,
+      slug: resolvedParams.slug,
     },
   });
 
@@ -81,17 +82,13 @@ const page = async ({ params }: PageProps) => {
         <div className="prose max-w-none mb-6 overflow-hidden h-auto w-full">
           <FroalaContentView model={project.content} />
         </div>
-        {/* <div
-          className="text-gray-600"
-          dangerouslySetInnerHTML={{ __html: project.content }}
-        /> */}
         <div className="w-full flex items-center gap-2 justify-end">
           <Button className="bg-slate-400 px-2 py-1 rounded-md hover:bg-slate-700 hover:text-white duration-200 ease-linear ">
             <Link href={`/dashboard/project/${project.slug}/edit`}>Edit</Link>
           </Button>
           <DeleteButton
             action={deleteProject}
-            args={[project.id]}
+            args={[String(project.id)]}
             buttonText="Delete"
             successRedirect="/dashboard/project"
             errorMessage="Error deleting project"

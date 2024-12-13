@@ -15,17 +15,18 @@ import { deleteSkill } from "@/app/api/crude/formActions";
 import { Button } from "@/components/ui/button";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-const page = async ({ params }: PageProps) => {
-  const skill = await prisma.skill.findUnique({
-    where: {
-      id: parseInt(params.id, 10),
-    },
-  });
+  const page: React.FC<PageProps> = async ({ params }: PageProps) => {
+    const resolvedParams = await params;
+    const skill = await prisma.skill.findUnique({
+      where: {
+        id: parseInt(resolvedParams.id, 10),
+      },
+    });
 
   if (!skill) {
     return (
@@ -80,7 +81,7 @@ const page = async ({ params }: PageProps) => {
           </Button>
           <DeleteButton
             action={deleteSkill}
-            args={[skill.id]}
+            args={[String(skill.id)]}
             buttonText="Delete"
             successRedirect="/dashboard/skill"
             errorMessage="Error deleting skill"

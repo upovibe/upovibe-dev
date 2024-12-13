@@ -14,17 +14,19 @@ import FormLayout from "@/components/dashboardUi/FormLayout";
 import { editSkill } from "@/app/api/crude/formActions";
 
 interface PageProps {
-    params: {
-      id: string;
-    };
-  }
+  params: Promise<{
+    id: string;
+  }>;
+}
 
-const page = async ({ params }: PageProps) => {
-  const skill = await prisma.skill.findUnique({
-    where: {
-        id: parseInt(params.id, 10),
+  const page: React.FC<PageProps> = async ({ params }: PageProps) => {
+    const resolvedParams = await params;
+    const skill = await prisma.skill.findUnique({
+      where: {
+        id: parseInt(resolvedParams.id, 10),
       },
-  });
+    });
+
 
   if (!skill || !skill.id) {
     return (

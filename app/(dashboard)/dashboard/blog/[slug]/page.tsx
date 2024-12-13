@@ -1,39 +1,32 @@
-import React from "react";
-import Image from "next/image";
 import { prisma } from "@/prisma";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { FilePenLine } from "lucide-react";
 import DeleteButton from "@/components/dashboardUi/DeleteButton";
-import { deleteBlog } from "@/app/api/crude/formActions"; // Correct function for deleting a blog
-import { Button } from "@/components/ui/button";
+import { deleteBlog } from "@/app/api/crude/formActions";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbSeparator, BreadcrumbPage } from "@/components/ui/breadcrumb";
+import Link from "next/link";
+import Image from "next/image";
 import FroalaContentView from "@/components/ui/FroalaContentView";
 
+
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
-const page = async ({ params }: PageProps) => {
+
+const page: React.FC<PageProps> = async ({ params }: PageProps) => {
+  const resolvedParams = await params;
   const blog = await prisma.blog.findUnique({
     where: {
-      slug: params.slug,
+      slug: resolvedParams.slug,
     },
   });
 
+  // If no blog is found, return an error page or message
   if (!blog) {
-    return (
-      <div>
-        <h1 className="text-2xl font-bold">Blog Not Found</h1>
-      </div>
-    );
+    return <div><h1 className="text-2xl font-bold">Blog Not Found</h1></div>;
   }
 
   return (
@@ -63,15 +56,9 @@ const page = async ({ params }: PageProps) => {
           {blog.title}
         </h1>
         <h2 className="border-t border-b py-1 text-xl">{blog.description}</h2>
-        {/* Image Section */}
         {blog.image && (
           <div className="w-full h-64 relative overflow-hidden rounded-lg border">
-            <Image
-              src={blog.image}
-              alt={blog.title}
-              fill
-              className="object-cover"
-            />
+            <Image src={blog.image} alt={blog.title} fill className="object-cover" />
           </div>
         )}
         <div className="prose max-w-none mb-6 overflow-hidden h-auto w-full">
@@ -83,7 +70,7 @@ const page = async ({ params }: PageProps) => {
           </Button>
           <DeleteButton
             action={deleteBlog}
-            args={[blog.id]}
+            args={[String(blog.id)]}
             buttonText="Delete"
             successRedirect="/dashboard/blog"
             errorMessage="Error deleting blog"

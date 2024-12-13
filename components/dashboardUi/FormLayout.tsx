@@ -10,7 +10,6 @@ import toast from "react-hot-toast";
 import Image from "next/image";
 import { truncateText } from "@/utils/truncateText";
 import { ImageIcon, X } from "lucide-react";
-import QuillEditor from "@/components/dashboardUi/QuillEditor";
 import FroalaWysiwyg from "@/components/dashboardUi/FroalaWysiwyg";
 
 interface FormLayoutProps {
@@ -36,7 +35,7 @@ interface FormLayoutProps {
   };
   onSubmit: (
     formData: FormData,
-    ...args: unknown[]
+    id: string | number
   ) => Promise<{ success: boolean; error?: string }>;
   additionalSubmitArgs?: unknown[];
   initialData?: {
@@ -44,7 +43,7 @@ interface FormLayoutProps {
     name?: string;
     description?: string;
     content?: string;
-    image?: string;
+    image?: string | null;
     tags?: string;
     score?: number;
     href?: string;
@@ -145,7 +144,11 @@ const FormLayout: React.FC<FormLayoutProps> = ({
       return;
     }
 
-    const result = await onSubmit(formData, ...additionalSubmitArgs);
+    // const result = await onSubmit(formData, ...additionalSubmitArgs);
+    const result = await onSubmit(
+      formData,
+      ...([additionalSubmitArgs[0]] as [string | number])
+    );
 
     if (result.success) {
       toast.success("Form submitted successfully!");
@@ -244,45 +247,6 @@ const FormLayout: React.FC<FormLayoutProps> = ({
             )}
           </div>
         )}
-        {/* {fields.includes("content") && (
-          <div className="grid w-full gap-1.5">
-            <Label htmlFor="content">{labels.content}</Label>
-            <Textarea
-              placeholder={`Enter ${labels.content?.toLowerCase()}`}
-              id="content"
-              name="content"
-              defaultValue={initialData?.content}
-            />
-            {errors.content && (
-              <p className="text-red-500 text-sm">{errors.content}</p>
-            )}
-          </div>
-        )} */}
-        {/* {fields.includes("content") && (
-          <div className="grid w-full gap-1.5">
-            <Label htmlFor="content">{labels.content}</Label>
-            <QuillEditor
-              initialValue={initialData?.content || ""}
-              onChange={(value: string) => {
-                const hiddenInput = document.getElementById(
-                  "hidden-content-input"
-                ) as HTMLInputElement;
-                if (hiddenInput) {
-                  hiddenInput.value = value;
-                }
-              }}
-            />
-            <input
-              type="hidden"
-              id="hidden-content-input"
-              name="content"
-              defaultValue={initialData?.content || ""}
-            />
-            {errors.content && (
-              <p className="text-red-500 text-sm">{errors.content}</p>
-            )}
-          </div>
-        )} */}
         {fields.includes("tags") && (
           <div className="grid w-full gap-1.5">
             <Label htmlFor="tags">{labels.tags}</Label>
@@ -324,15 +288,13 @@ const FormLayout: React.FC<FormLayoutProps> = ({
             {imagePreview ? (
               <div className="flex items-end gap-2">
                 <div className="relative size-20">
-                  {/* Image Preview */}
                   <Image
                     src={imagePreview}
                     alt="Selected"
                     width={200}
                     height={200}
-                    className=" object-cover rounded"
+                    className="object-cover rounded"
                   />
-                  {/* Remove Button */}
                   <button
                     type="button"
                     onClick={handleRemoveImage}
@@ -341,7 +303,6 @@ const FormLayout: React.FC<FormLayoutProps> = ({
                     <X />
                   </button>
                 </div>
-                {/* File Name */}
                 <p className="text-sm text-gray-600">
                   {truncateText(imagePreview.split("/").pop() || "", 20)}
                 </p>
@@ -355,6 +316,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
                 <span>{labels.image}</span>
               </label>
             )}
+
             <input
               id="image"
               type="file"

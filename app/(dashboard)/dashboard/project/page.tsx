@@ -20,6 +20,16 @@ const page = async () => {
     await prisma.project.delete({ where: { id } });
   };
 
+  // Transform the project data to match the expected format
+  const transformedProject = project.map((item) => ({
+    id: item.id,
+    name: item.title,
+    slug: item.slug,
+    image: item.image,
+    createdAt: item.createdAt.toLocaleString(),
+    updatedAt: item.updatedAt.toLocaleString(),
+  }));
+
   return (
     <div>
       <Breadcrumb className="border px-1 rounded-md mb-5">
@@ -41,7 +51,11 @@ const page = async () => {
         <FolderGit2 className="size-5" />
         Projects
       </h1>
-      <TableLayout data={project} title="Project" deleteRow={deleteRow} />
+      <TableLayout
+        data={transformedProject}
+        title="Project"
+        deleteRow={deleteRow}
+      />
     </div>
   );
 };

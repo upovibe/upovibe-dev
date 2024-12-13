@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 interface ContactLink {
   id: number;
   name: string;
-  image: string;
+  image: string | null;
   href: string;
 }
 
@@ -39,7 +39,11 @@ const ContactMe: React.FC<ContactMeProps> = ({ contactlinks }) => {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
   };
 
   return (
@@ -84,13 +88,15 @@ const ContactMe: React.FC<ContactMeProps> = ({ contactlinks }) => {
                 >
                   <div className="absolute top-0 left-0 w-full h-full rounded-full border-2 border-transparent group-hover:animate-shine"></div>
                   <div className="relative flex items-center gap-3">
-                    <Image
-                      src={contactLink.image}
-                      alt={contactLink.name}
-                      width={400}
-                      height={400}
-                      className="min-w-8 max-w-8 transition-all duration-300"
-                    />
+                    {contactLink.image !== null && (
+                      <Image
+                        src={contactLink.image}
+                        alt={contactLink.name}
+                        width={400}
+                        height={400}
+                        className="min-w-8 max-w-8 transition-all duration-300"
+                      />
+                    )}
                     <h2 className="text-center text-lg font-bold capitalize text-white dark:text-gray-100 transition-all duration-200 ease-linear">
                       Contact me on {contactLink.name}
                     </h2>

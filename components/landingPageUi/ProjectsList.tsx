@@ -7,10 +7,10 @@ import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Separator } from "../ui/separator";
 
 interface Project {
-  id: string;
+  id: number;
   slug: string;
   title: string;
-  image: string;
+  image: string | null;
 }
 
 interface ProjectsListProps {
@@ -55,7 +55,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ projects }) => {
               {/* Image container with overlay */}
               <div className="relative">
                 <Image
-                  src={project.image}
+                  src={project.image || "/default-image.jpg"}
                   alt={project.title}
                   width={400}
                   height={400}

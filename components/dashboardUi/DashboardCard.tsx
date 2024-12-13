@@ -4,17 +4,17 @@ import MetricCard from "@/components/dashboardUi/MetricCard";
 
 // Define the prop types for projects, blogs, and skills
 interface Project {
-  id: string;
+  id: number;
   title: string;
 }
 
 interface Blog {
-  id: string;
+  id: number;
   title: string;
 }
 
 interface Skill {
-  id: string;
+  id: number;
   name: string;
 }
 

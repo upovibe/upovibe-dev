@@ -14,15 +14,16 @@ import FormLayout from "@/components/dashboardUi/FormLayout";
 import { editProject } from "@/app/api/crude/formActions";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 const page = async ({ params }: PageProps) => {
+  const resolvedParams = await params;
   const project = await prisma.project.findUnique({
     where: {
-      slug: params.slug,
+      slug: resolvedParams.slug,
     },
   });
 

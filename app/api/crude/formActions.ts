@@ -72,7 +72,7 @@ export const createProject = async (formData: FormData) => {
   }
 };
 
-export const editProject = async (formData: FormData, id: string) => {
+export const editProject = async (formData: FormData, id: string | number) => {
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
   const imageFile = formData.get("image") as File | null;
@@ -111,7 +111,8 @@ export const editProject = async (formData: FormData, id: string) => {
   }
 
   try {
-    const parsedId = parseInt(id);
+    // const parsedId = parseInt(id);
+    const parsedId = typeof id === 'string' ? parseInt(id) : id;
     if (isNaN(parsedId)) throw new Error("Invalid project ID");
 
     // Fetch the current project to get the existing image
@@ -233,7 +234,7 @@ export const createBlog = async (formData: FormData) => {
 };
 
 // Edit a blog
-export const editBlog = async (formData: FormData, id: string) => {
+export const editBlog = async (formData: FormData, id: string | number) => {
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
   const imageFile = formData.get("image") as File | null;
@@ -247,7 +248,8 @@ export const editBlog = async (formData: FormData, id: string) => {
   let imagePath: string | null = null;
 
   try {
-    const parsedId = parseInt(id);
+    // const parsedId = parseInt(id);
+    const parsedId = typeof id === 'string' ? parseInt(id) : id;
     if (isNaN(parsedId)) throw new Error("Invalid blog ID");
 
     // Fetch the current blog to get the existing image
@@ -377,6 +379,7 @@ export const createSkill = async (formData: FormData) => {
     await prisma.skill.create({
       data: {
         name,
+        // slug: name.replace(/\s+/g, "_").toLowerCase(),
         score: parsedScore,
         image: imagePath,
       },
@@ -393,7 +396,7 @@ export const createSkill = async (formData: FormData) => {
 };
 
 // Edit an existing skill
-export const editSkill = async (formData: FormData, id: string) => {
+export const editSkill = async (formData: FormData, id: string | number) => {
   const name = formData.get("name") as string | null;
   const score = formData.get("score") as string | null;
   const imageFile = formData.get("image") as File | null;
@@ -410,7 +413,8 @@ export const editSkill = async (formData: FormData, id: string) => {
   let imagePath: string | null = null;
 
   try {
-    const parsedId = parseInt(id);
+    // const parsedId = parseInt(id);
+    const parsedId = typeof id === 'string' ? parseInt(id) : id;
     if (isNaN(parsedId)) throw new Error("Invalid skill ID");
 
     // Fetch the current skill to get the existing image
@@ -447,8 +451,9 @@ export const editSkill = async (formData: FormData, id: string) => {
       where: { id: parsedId },
       data: {
         name,
+        // slug: name.replace(/\s+/g, "_").toLowerCase(),
         score: parsedScore,
-        image: imagePath, // Use the new image path or retain the old one
+        image: imagePath,
       },
     });
 
@@ -528,6 +533,7 @@ export const createContactLink = async (formData: FormData) => {
     await prisma.contactLink.create({
       data: {
         name,
+        // slug: name.replace(/\s+/g, "_").toLowerCase(),
         href,
         image: imagePath || "",
       },
@@ -544,7 +550,7 @@ export const createContactLink = async (formData: FormData) => {
 };
 
 // Edit a ContactLink
-export const editContactLink = async (formData: FormData, id: string) => {
+export const editContactLink = async (formData: FormData, id: string | number) => {
   const name = formData.get("name") as string | null;
   const href = formData.get("href") as string | null;
   const imageFile = formData.get("image") as File | null;
@@ -556,7 +562,8 @@ export const editContactLink = async (formData: FormData, id: string) => {
   let imagePath: string | null = null;
 
   try {
-    const parsedId = parseInt(id);
+    // const parsedId = parseInt(id);
+    const parsedId = typeof id === 'string' ? parseInt(id) : id;
     if (isNaN(parsedId)) throw new Error("Invalid contact link ID");
 
     const existingContactLink = await prisma.contactLink.findUnique({ where: { id: parsedId } });
@@ -589,8 +596,9 @@ export const editContactLink = async (formData: FormData, id: string) => {
       where: { id: parsedId },
       data: {
         name,
+        // slug: name.replace(/\s+/g, "_").toLowerCase(),
         href,
-        image: imagePath,
+        image: imagePath || "",
       },
     });
 

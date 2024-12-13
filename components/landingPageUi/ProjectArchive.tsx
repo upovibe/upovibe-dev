@@ -9,10 +9,10 @@ import { truncateText } from "@/utils/truncateText";
 import { motion } from "framer-motion";
 
 interface Project {
-  id: string;
+  id: number;
   slug: string;
   title: string;
-  image: string;
+  image: string | null;
 }
 
 interface ProjectArchiveProps {
@@ -42,7 +42,11 @@ const ProjectArchive: React.FC<ProjectArchiveProps> = ({ projects }) => {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
   };
 
   return (
@@ -86,7 +90,7 @@ const ProjectArchive: React.FC<ProjectArchiveProps> = ({ projects }) => {
                     {/* Image container with overlay */}
                     <div className="relative">
                       <Image
-                        src={project.image}
+                        src={project.image || "/default-image.jpg"}
                         alt={project.title}
                         width={400}
                         height={400}
@@ -107,7 +111,10 @@ const ProjectArchive: React.FC<ProjectArchiveProps> = ({ projects }) => {
       </motion.div>
 
       {/* Corrected Link component for navigation */}
-      <Button variant="ghost" className="ml-auto my-8 py-2 text-white bg-slate-100/20">
+      <Button
+        variant="ghost"
+        className="ml-auto my-8 py-2 text-white bg-slate-100/20"
+      >
         <Link href="/project">View more</Link>
       </Button>
     </div>

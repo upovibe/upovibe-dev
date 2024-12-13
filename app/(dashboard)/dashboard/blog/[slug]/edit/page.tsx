@@ -14,15 +14,16 @@ import FormLayout from "@/components/dashboardUi/FormLayout";
 import { editBlog } from "@/app/api/crude/formActions";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 const page = async ({ params }: PageProps) => {
+  const resolvedParams = await params;
   const blog = await prisma.blog.findUnique({
     where: {
-      slug: params.slug,
+      slug: resolvedParams.slug,
     },
   });
 
@@ -75,7 +76,7 @@ const page = async ({ params }: PageProps) => {
             image: "Image",
           }}
           onSubmit={editBlog}
-          additionalSubmitArgs={[blog.id]}
+          additionalSubmitArgs={[blog.id]}          
           initialData={{
             title: blog.title,
             description: blog.description,

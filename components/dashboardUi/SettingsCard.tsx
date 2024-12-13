@@ -5,7 +5,7 @@ import MetricCard from "@/components/dashboardUi/MetricCard";
 
 // Define the prop types for projects, blogs, and skills
 interface Contact {
-  id: string;
+  id: number;
   name: string;
 }
 

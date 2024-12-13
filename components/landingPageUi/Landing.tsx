@@ -9,23 +9,25 @@ import ContactMe from "@/components/landingPageUi/ContactMe";
 import ProjectArchive from "@/components/landingPageUi/ProjectArchive";
 import ScrollToTop from "../ui/ScrollToTop";
 
+
 interface Project {
   id: number;
+  slug: string;
   title: string;
-  image: string;
+  image: string | null;
 }
 
 interface Skill {
-  id: string;
+  id: number;
   name: string;
-  image: string;
+  image: string | null;
   score: number;
 }
 
 interface ContactLink {
   id: number;
   name: string;
-  image: string;
+  image: string | null;
   href: string;
 }
 

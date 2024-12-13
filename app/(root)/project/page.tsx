@@ -1,10 +1,9 @@
 import React from "react";
 import { prisma } from "@/prisma";
-import ProjectsList from "@/components/landingPageUi/ProjectsList"; // Import your Client Component
+import ProjectsList from "@/components/landingPageUi/ProjectsList";
 
-// This function will run on the server and fetch the projects
 const ProjectsPage = async () => {
-  const projects = await prisma.project.findMany(); // Server-side data fetching
+  const projects = await prisma.project.findMany();
   return <ProjectsList projects={projects} />;
 };
 

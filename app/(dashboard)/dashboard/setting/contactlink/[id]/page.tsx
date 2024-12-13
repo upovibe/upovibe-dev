@@ -15,15 +15,16 @@ import { deleteContactLink } from "@/app/api/crude/formActions";
 import { Button } from "@/components/ui/button";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-const page = async ({ params }: PageProps) => {
+const page: React.FC<PageProps> = async ({ params }: PageProps) => {
+  const resolvedParams = await params;
   const contactLink = await prisma.contactLink.findUnique({
     where: {
-      id: parseInt(params.id, 10),
+      id: parseInt(resolvedParams.id, 10),
     },
   });
 
@@ -74,14 +75,18 @@ const page = async ({ params }: PageProps) => {
             />
           </div>
         )}
-      <div>{contactLink.href}</div>
+        <div>{contactLink.href}</div>
         <div className="w-full flex items-center gap-2 justify-end">
           <Button className="bg-slate-400 px-2 py-1 rounded-md hover:bg-slate-700 hover:text-white duration-200 ease-linear ">
-            <Link href={`/dashboard/setting/contactlink/${contactLink.id}/edit`}>Edit</Link>
+            <Link
+              href={`/dashboard/setting/contactlink/${contactLink.id}/edit`}
+            >
+              Edit
+            </Link>
           </Button>
           <DeleteButton
             action={deleteContactLink}
-            args={[contactLink.id]}
+            args={[String(contactLink.id)]}
             buttonText="Delete"
             successRedirect="/dashboard/setting/contactlink"
             errorMessage="Error deleting contactLink"

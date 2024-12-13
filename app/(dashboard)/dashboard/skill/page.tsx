@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import { prisma } from "@/prisma";
-import TableLayout from "@/components/dashboardUi/TableLayout";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -11,6 +10,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Lightbulb } from "lucide-react";
+import TableLayout from "@/components/dashboardUi/TableLayout";
 
 const page = async () => {
   const skill = await prisma.skill.findMany();
@@ -41,9 +41,13 @@ const page = async () => {
         <Lightbulb className="size-5" />
         Skills
       </h1>
-      <TableLayout data={skill} title="skill" deleteRow={deleteRow} />
+      <TableLayout
+        data={skill}
+        title="skill"
+        deleteRow={deleteRow}
+      />
     </div>
   );
 };
-
+ 
 export default page;

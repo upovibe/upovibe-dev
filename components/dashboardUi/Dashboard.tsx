@@ -8,24 +8,24 @@ import DashboardCard from "@/components/dashboardUi/DashboardCard";
 
 // Define the interfaces for data types
 interface Project {
-  id: string;
+  id: number;
   title: string;
 }
 
 interface Blog {
-  id: string;
+  id: number;
   title: string;
 }
 
 interface Skill {
-  id: string;
+  id: number;
   name: string;
 }
 
 interface DashboardProps {
   projects: Project[];
   blogs: Blog[];
-  skills: Skill[]; // Corrected the typo
+  skills: Skill[];
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ projects, blogs, skills }) => {

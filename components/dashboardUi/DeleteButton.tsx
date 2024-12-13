@@ -8,8 +8,8 @@ import toast from "react-hot-toast";
 import { Loader } from "lucide-react";
 
 interface ActionButtonProps {
-  action: (...args: unknown[]) => Promise<{ success: boolean; error?: string }>;
-  args: unknown[];
+  action: (id: string) => Promise<{ success: boolean; error?: string }>; // Define the action type here
+  args: [string];  // Ensure args is an array containing a single string (id)
   successRedirect?: string;
   errorMessage?: string;
   buttonText: string;
@@ -34,7 +34,7 @@ const DeleteButton: React.FC<ActionButtonProps> = ({
     setIsLoading(true);
 
     try {
-      const result = await action(...args);
+      const result = await action(...args);  // Spread args here as they are an array
 
       if (result.success) {
         toast.success("Successful!");
@@ -71,5 +71,6 @@ const DeleteButton: React.FC<ActionButtonProps> = ({
     </div>
   );
 };
+
 
 export default DeleteButton;

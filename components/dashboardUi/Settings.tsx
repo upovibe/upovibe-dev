@@ -7,7 +7,7 @@ import LoaderCircle from "@/components/ui/LoaderCircle";
 import SettingsCard from "@/components/dashboardUi/SettingsCard";
 
 interface Contact {
-  id: string;
+  id: number;
   name: string;
 }
 
