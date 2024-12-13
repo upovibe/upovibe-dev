@@ -3,7 +3,6 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-// import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import Lottie from "lottie-react";
 import ProjectData from "@/public/animations/Projects.json";
 import { Separator } from "../ui/separator";

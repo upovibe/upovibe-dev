@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-// import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import Lottie from "lottie-react";
 import HeroData from "@/public/animations/Hero.json";
 import { motion } from "framer-motion";
@@ -51,11 +50,6 @@ function Hero() {
         className="w-full lg:w-4/12 flex justify-center items-center"
         variants={animationVariants}
       >
-        {/* <DotLottieReact
-          src="https://lottie.host/056d4b53-2195-4a1e-b4b1-9269f09b6506/NGOOsDFLR9.json"
-          loop
-          autoplay
-        /> */}
         <Lottie animationData={HeroData} loop={true} className="max-w-lg lg:max-w-full" />
       </motion.div>
     </motion.div>
