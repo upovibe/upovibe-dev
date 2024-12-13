@@ -1,4 +1,8 @@
 import type { NextConfig } from "next";
+import { config as dotenvConfig } from 'dotenv';
+
+// Load environment variables from .env file
+dotenvConfig();
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -12,73 +16,13 @@ const nextConfig: NextConfig = {
     ],
     domains: [],
   },
+  env: {
+    NEXT_PUBLIC_AUTH_SECRET: process.env.AUTH_SECRET,
+    NEXT_PUBLIC_AUTH_GITHUB_ID: process.env.AUTH_GITHUB_ID,
+    NEXT_PUBLIC_AUTH_GITHUB_SECRET: process.env.AUTH_GITHUB_SECRET,
+    NEXT_PUBLIC_AUTH_ALLOWED_EMAIL: process.env.AUTH_ALLOWED_EMAIL,
+    NEXT_PUBLIC_DATABASE_URL: process.env.DATABASE_URL,
+  },
 };
 
 export default nextConfig;
-
-
-// import type { NextConfig } from "next";
-
-// const nextConfig: NextConfig = {
-//   reactStrictMode: true,
-//   images: {
-//     remotePatterns: [
-//       {
-//         protocol: "https",
-//         hostname: "avatars.githubusercontent.com",
-//         pathname: "/**",
-//       },
-//     ],
-//     domains: [],
-//   },
-//   async headers() {
-//     return [
-//       {
-//         source: '/favicon.ico',
-//         headers: [
-//           {
-//             key: 'Cache-Control',
-//             value: 'public, max-age=3600',
-//           },
-//         ],
-//       },
-//     ];
-//   },
-// };
-
-// export default nextConfig;
-
-// import type { NextConfig } from "next";
-
-// const getHeaders = async () => {
-//   return [
-//     {
-//       source: '/favicon.ico',
-//       headers: [
-//         {
-//           key: 'Cache-Control',
-//           value: 'public, max-age=3600',
-//         },
-//       ],
-//     },
-//   ];
-// };
-
-// const nextConfig: NextConfig = {
-//   reactStrictMode: true,
-//   images: {
-//     remotePatterns: [
-//       {
-//         protocol: "https",
-//         hostname: "avatars.githubusercontent.com",
-//         pathname: "/**",
-//       },
-//     ],
-//     domains: [],
-//   },
-//   async headers() {
-//     return getHeaders();
-//   },
-// };
-
-// export default nextConfig;
