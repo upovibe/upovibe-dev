@@ -10,7 +10,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Contact } from "lucide-react";
+import { FolderGit2 } from "lucide-react";
 
 const page = async () => {
   const contactLink = await prisma.contactLink.findMany();
@@ -19,6 +19,17 @@ const page = async () => {
     "use server";
     await prisma.contactLink.delete({ where: { id } });
   };
+
+  // Transform the contactLink data to match the expected format
+  const transformedContactLink = contactLink.map((item) => ({
+    id: item.id,
+    name: item.name,
+    slug: item.name.toLowerCase().replace(/\s+/g, '-'),
+    href: item.href,
+    image: item.image,
+    createdAt: item.createdAt.toLocaleString(),
+    updatedAt: item.updatedAt.toLocaleString(),
+  }));
 
   return (
     <div>
@@ -33,19 +44,18 @@ const page = async () => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Contact links</BreadcrumbPage>
+            <BreadcrumbPage>contactLink</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
       <h1 className="text-2xl font-bold flex items-center gap-2">
-        <Contact className="size-5" />
-        My Contact links
+        <FolderGit2 className="size-5" />
+        contactLinks
       </h1>
       <TableLayout
-        data={contactLink}
+        data={transformedContactLink}
         title="contactLink"
         deleteRow={deleteRow}
-        baseUrl="/dashboard/setting/contactlink"
       />
     </div>
   );

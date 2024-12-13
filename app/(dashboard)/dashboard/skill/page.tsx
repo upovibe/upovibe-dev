@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { prisma } from "@/prisma";
+import TableLayout from "@/components/dashboardUi/TableLayout";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,8 +10,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Lightbulb } from "lucide-react";
-import TableLayout from "@/components/dashboardUi/TableLayout";
+import { FolderGit2 } from "lucide-react";
 
 const page = async () => {
   const skill = await prisma.skill.findMany();
@@ -19,6 +19,16 @@ const page = async () => {
     "use server";
     await prisma.skill.delete({ where: { id } });
   };
+
+  // Transform the skill data to match the expected format
+  const transformedSkill = skill.map((item) => ({
+    id: item.id,
+    name: item.name,
+    slug: item.name.toLowerCase().replace(/\s+/g, '-'),
+    image: item.image,
+    createdAt: item.createdAt.toLocaleString(),
+    updatedAt: item.updatedAt.toLocaleString(),
+  }));
 
   return (
     <div>
@@ -33,21 +43,21 @@ const page = async () => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Skill</BreadcrumbPage>
+            <BreadcrumbPage>skill</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
       <h1 className="text-2xl font-bold flex items-center gap-2">
-        <Lightbulb className="size-5" />
-        Skills
+        <FolderGit2 className="size-5" />
+        skills
       </h1>
       <TableLayout
-        data={skill}
+        data={transformedSkill}
         title="skill"
         deleteRow={deleteRow}
       />
     </div>
   );
 };
- 
+
 export default page;
