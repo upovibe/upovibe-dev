@@ -11,11 +11,17 @@ interface Contact {
   name: string;
 }
 
-interface SettingsProps {
-  contacts: Contact[];
+interface Skill {
+  id: number;
+  name: string;
 }
 
-const Settings: React.FC<SettingsProps> = ({ contacts }) => {
+interface SettingsProps {
+  contacts: Contact[];
+  skills: Skill[];
+}
+
+const Settings: React.FC<SettingsProps> = ({ contacts, skills }) => {
   const { data: session, status } = useSession();
 
   if (status === "loading") {
@@ -36,7 +42,7 @@ const Settings: React.FC<SettingsProps> = ({ contacts }) => {
       </p>
 
       {/* Display Contacts Overview */}
-      <SettingsCard contacts={contacts} />
+      <SettingsCard contacts={contacts} skills={skills} />
 
     </div>
   );

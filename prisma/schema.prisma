@@ -1,11 +1,13 @@
 datasource db {
-  provider = "sqlite"   // or "postgresql", "mysql", etc. depending on your database
-  url      = env("DATABASE_URL")  // This is usually loaded from your .env file
+provider = "sqlite" // or "postgresql", "mysql", etc. depending on your database
+url = env("DATABASE_URL") // This is usually loaded from your .env file
 }
 
 generator client {
   provider = "prisma-client-js"
 }
+
+// Project Model
 
 model Project {
   id          Int      @id @default(autoincrement())
@@ -19,6 +21,8 @@ model Project {
   updatedAt   DateTime @updatedAt
 }
 
+// Blog Model
+
 model Blog {
   id          Int      @id @default(autoincrement())
   title       String
@@ -31,20 +35,28 @@ model Blog {
   updatedAt   DateTime @updatedAt
 }
 
-model Skill {
-  id        Int      @id @default(autoincrement())
-  name      String
-  image     String?
-  score     Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+// -----------------------Settings---------------------
+
+// My Contact Links
 
 model ContactLink {
   id        Int      @id @default(autoincrement())
   name      String
+  slug      String   @unique
   image     String?
   href      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// My Skills 
+
+model Skill {
+  id        Int      @id @default(autoincrement())
+  name      String
+  slug      String   @unique
+  image     String?
+  score     Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

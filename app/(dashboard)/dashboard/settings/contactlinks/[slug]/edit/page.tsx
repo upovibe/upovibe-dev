@@ -11,27 +11,26 @@ import {
 import Link from "next/link";
 import { Tag } from "lucide-react";
 import FormLayout from "@/components/dashboardUi/FormLayout";
-import { editSkill } from "@/app/api/crude/formActions";
+import { editContactLink } from "@/app/api/crude/formActions";
 
 interface PageProps {
   params: Promise<{
-    id: string;
+    slug: string;
   }>;
 }
 
-  const page: React.FC<PageProps> = async ({ params }: PageProps) => {
-    const resolvedParams = await params;
-    const skill = await prisma.skill.findUnique({
-      where: {
-        id: parseInt(resolvedParams.id, 10),
-      },
-    });
+const page = async ({ params }: PageProps) => {
+  const resolvedParams = await params;
+  const contactLink = await prisma.contactLink.findUnique({
+    where: {
+      slug: resolvedParams.slug,
+    },
+  });
 
-
-  if (!skill || !skill.id) {
+  if (!contactLink || !contactLink.id) {
     return (
       <div>
-        <h1 className="text-2xl font-bold">skill Not Found</h1>
+        <h1 className="text-2xl font-bold">Contact Link Not Found</h1>
       </div>
     );
   }
@@ -48,12 +47,12 @@ interface PageProps {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href="/dashboard/skill">skill</Link>
+            <Link href="/dashboard/contactLink">Contact Link</Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href={`/dashboard/skill/${skill.id}`}>
-              {skill.id}
+            <Link href={`/dashboard/setting/contactLink/${contactLink.id}`}>
+              {contactLink.id}
             </Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -65,23 +64,23 @@ interface PageProps {
       <div className="flex flex-col gap-2">
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <Tag className="size-5" />
-          Edit {skill.name}
+          Edit {contactLink.name}
         </h1>
         <FormLayout
-          fields={["name", "image", "score"]}
+          fields={["name", "href", "image"]}
           labels={{
-            name: "skill Name",
-            score: "Score",
+            name: "contactLink Name",
+            href: "Link",
             image: "Image",
           }}
-          onSubmit={editSkill}
-          additionalSubmitArgs={[skill.id]}
+          onSubmit={editContactLink}
+          additionalSubmitArgs={[contactLink.id]}
           initialData={{
-            name: skill.name,
-            score: skill.score,
-            image: skill.image,
+            name: contactLink.name,
+            href: contactLink.href,
+            image: contactLink.image,
           }}
-          successRedirect={"/dashboard/skill"}
+          successRedirect={"/dashboard/settings/contactlinks"}
         />
       </div>
     </div>

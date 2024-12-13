@@ -7,10 +7,10 @@ import {
   BreadcrumbItem,
   // BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
+  BreadcrumbPage, 
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { FolderGit2 } from "lucide-react";
+import { Share2 } from "lucide-react";
 
 const page = async () => {
   const contactLink = await prisma.contactLink.findMany();
@@ -24,7 +24,7 @@ const page = async () => {
   const transformedContactLink = contactLink.map((item) => ({
     id: item.id,
     name: item.name,
-    slug: item.name.toLowerCase().replace(/\s+/g, '-'),
+    slug: item.slug,
     href: item.href,
     image: item.image,
     createdAt: item.createdAt.toLocaleString(),
@@ -41,6 +41,10 @@ const page = async () => {
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <Link href="/dashboard">Dashboard</Link>
+          </BreadcrumbItem>          
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <Link href="/dashboard/settings">Settings</Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
@@ -49,13 +53,14 @@ const page = async () => {
         </BreadcrumbList>
       </Breadcrumb>
       <h1 className="text-2xl font-bold flex items-center gap-2">
-        <FolderGit2 className="size-5" />
-        contactLinks
+        <Share2 className="size-5" />
+            My Contact Links
       </h1>
       <TableLayout
         data={transformedContactLink}
-        title="contactLink"
+        title="Contact Link"
         deleteRow={deleteRow}
+        baseUrl="/dashboard/settings/contactlinks"
       />
     </div>
   );

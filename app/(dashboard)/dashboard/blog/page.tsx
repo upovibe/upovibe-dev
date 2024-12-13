@@ -27,8 +27,8 @@ const page = async () => {
     name: item.title,
     slug: item.slug,   
     image: item.image, 
-    createdAt: item.createdAt.toLocaleString(), // Format createdAt
-    updatedAt: item.updatedAt.toLocaleString(), // Format updatedAt
+    createdAt: item.createdAt.toLocaleString(), 
+    updatedAt: item.updatedAt.toLocaleString(),
   }));
 
   return (

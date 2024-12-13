@@ -24,7 +24,8 @@ const page = async () => {
   const transformedSkill = skill.map((item) => ({
     id: item.id,
     name: item.name,
-    slug: item.name.toLowerCase().replace(/\s+/g, '-'),
+    slug: item.slug,
+    score: item.score,
     image: item.image,
     createdAt: item.createdAt.toLocaleString(),
     updatedAt: item.updatedAt.toLocaleString(),
@@ -43,6 +44,10 @@ const page = async () => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
+            <Link href="/dashboard/settings">Settings</Link>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
             <BreadcrumbPage>skill</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
@@ -55,6 +60,7 @@ const page = async () => {
         data={transformedSkill}
         title="skill"
         deleteRow={deleteRow}
+        baseUrl="/dashboard/settings/skills"
       />
     </div>
   );

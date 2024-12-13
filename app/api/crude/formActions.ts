@@ -379,7 +379,7 @@ export const createSkill = async (formData: FormData) => {
     await prisma.skill.create({
       data: {
         name,
-        // slug: name.replace(/\s+/g, "_").toLowerCase(),
+        slug: name.replace(/\s+/g, "_").toLowerCase(),
         score: parsedScore,
         image: imagePath,
       },
@@ -451,7 +451,7 @@ export const editSkill = async (formData: FormData, id: string | number) => {
       where: { id: parsedId },
       data: {
         name,
-        // slug: name.replace(/\s+/g, "_").toLowerCase(),
+        slug: name.replace(/\s+/g, "_").toLowerCase(),
         score: parsedScore,
         image: imagePath,
       },
@@ -533,7 +533,7 @@ export const createContactLink = async (formData: FormData) => {
     await prisma.contactLink.create({
       data: {
         name,
-        // slug: name.replace(/\s+/g, "_").toLowerCase(),
+        slug: name.replace(/\s+/g, "_").toLowerCase(),
         href,
         image: imagePath || "",
       },

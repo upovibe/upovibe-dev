@@ -9,29 +9,29 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
-import { Lightbulb } from "lucide-react";
+import { Contact } from "lucide-react";
 import DeleteButton from "@/components/dashboardUi/DeleteButton";
-import { deleteSkill } from "@/app/api/crude/formActions";
+import { deleteContactLink } from "@/app/api/crude/formActions";
 import { Button } from "@/components/ui/button";
 
 interface PageProps {
   params: Promise<{
-    id: string;
+    slug: string;
   }>;
 }
 
-  const page: React.FC<PageProps> = async ({ params }: PageProps) => {
-    const resolvedParams = await params;
-    const skill = await prisma.skill.findUnique({
-      where: {
-        id: parseInt(resolvedParams.id, 10),
-      },
-    });
+const page = async ({ params }: PageProps) => {
+  const resolvedParams = await params;
+  const contactLink = await prisma.contactLink.findUnique({
+    where: {
+      slug: resolvedParams.slug,
+    },
+  });
 
-  if (!skill) {
+  if (!contactLink) {
     return (
       <div>
-        <h1 className="text-  font-bold">skill Not Found</h1>
+        <h1 className="text-  font-bold">contactLink Not Found</h1>
       </div>
     );
   }
@@ -49,42 +49,47 @@ interface PageProps {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <Link href="/dashboard/skill">Skill</Link>
+            <Link href="/dashboard/setting/contactlink">Contact Link</Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>{skill.name}</BreadcrumbPage>
+            <BreadcrumbPage>{contactLink.name}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
       <div className="flex flex-col w-full gap-3 border p-2 rounded-lg">
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-bold flex items-center gap-2 capitalize">
-            <Lightbulb className="size-5" />
-            {skill.name}
+            <Contact className="size-5" />
+            {contactLink.name}
           </h1>
         </div>
         {/* Image Section */}
-        {skill.image && (
+        {contactLink.image && (
           <div className="size-40 relative overflow-hidden rounded-lg border flex items-center justify-center">
             <Image
-              src={skill.image}
-              alt={skill.name}
+              src={contactLink.image}
+              alt={contactLink.name}
               fill
               className="object-cover"
             />
           </div>
         )}
+        <div>{contactLink.href}</div>
         <div className="w-full flex items-center gap-2 justify-end">
           <Button className="bg-slate-400 px-2 py-1 rounded-md hover:bg-slate-700 hover:text-white duration-200 ease-linear ">
-            <Link href={`/dashboard/skill/${skill.id}/edit`}>Edit</Link>
+            <Link
+              href={`/dashboard/settings/contactlinks/${contactLink.slug}/edit`}
+            >
+              Edit
+            </Link>
           </Button>
           <DeleteButton
-            action={deleteSkill}
-            args={[String(skill.id)]}
+            action={deleteContactLink}
+            args={[String(contactLink.id)]}
             buttonText="Delete"
-            successRedirect="/dashboard/skill"
-            errorMessage="Error deleting skill"
+            successRedirect="/dashboard/settings/contactlinks"
+            errorMessage="Error deleting contactLink"
           />
         </div>
       </div>

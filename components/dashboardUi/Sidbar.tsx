@@ -27,8 +27,7 @@ const menuItems = [
   { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
   { label: "Project", icon: FolderGit2, href: "/dashboard/project" },
   { label: "Blog", icon: FilePenLine, href: "/dashboard/blog" },
-  { label: "Skill", icon: Lightbulb, href: "/dashboard/skill" },
-  { label: "Settings", icon: Settings, href: "/dashboard/setting" },
+  { label: "Settings", icon: Settings, href: "/dashboard/settings" },
 ];
 
 const Sidebar: React.FC<SidebarProps> = ({ user }) => {
